@@ -1,6 +1,6 @@
-﻿namespace ProductManagementSystem.Models;
+﻿namespace ProductManagementSystem.DTO;
 
-public class Product
+public class ProductResponse
 {
     public int Id { get; set; }
 
