@@ -2,60 +2,59 @@
 
 @inject NavigationManager NavigationManager
 
-<div class="top-row ps-3 navbar navbar-dark">
+<nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-        <a class="navbar-brand" href=""><img src="images/Logo.png" alt="logo" class="logo"/></a>
+        <a class="navbar-brand" href="">
+            <img src="images/Logo.png" alt="logo" class="logo"/>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavCollapse"
+                aria-controls="topNavCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="topNavCollapse">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                        <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                    </NavLink>
+                </li>
+
+                <AuthorizeView>
+                    <Authorized>
+                        <li class="nav-item">
+                            <NavLink class="nav-link" href="Account/Manage">
+                                                        <span class="bi bi-person-fill-nav-menu"
+                                                              aria-hidden="true"></span> @context.User.Identity?.Name
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <form class="d-inline" action="Account/Logout" method="post">
+                                <AntiforgeryToken/>
+                                <input type="hidden" name="ReturnUrl" value="@currentUrl"/>
+                                <button type="submit" class="btn btn-link nav-link p-0">
+                                    <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
+                                </button>
+                            </form>
+                        </li>
+                    </Authorized>
+                    <NotAuthorized>
+                        <li class="nav-item">
+                            <NavLink class="nav-link" href="Account/Register">
+                                <span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink class="nav-link" href="Account/Login">
+                                <span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Login
+                            </NavLink>
+                        </li>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </ul>
+        </div>
     </div>
-</div>
-
-<input type="checkbox" title="Navigation menu" class="navbar-toggler"/>
-
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="auth">
-                <span class="bi bi-lock-nav-menu" aria-hidden="true"></span> Auth Required
-            </NavLink>
-        </div>
-
-        <AuthorizeView>
-            <Authorized>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="Account/Manage">
-                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> @context.User.Identity?.Name
-                    </NavLink>
-                </div>
-                <div class="nav-item px-3">
-                    <form action="Account/Logout" method="post">
-                        <AntiforgeryToken/>
-                        <input type="hidden" name="ReturnUrl" value="@currentUrl"/>
-                        <button type="submit" class="nav-link">
-                            <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
-                        </button>
-                    </form>
-                </div>
-            </Authorized>
-            <NotAuthorized>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="Account/Register">
-                        <span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
-                    </NavLink>
-                </div>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="Account/Login">
-                        <span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Login
-                    </NavLink>
-                </div>
-            </NotAuthorized>
-        </AuthorizeView>
-    </nav>
-</div>
+</nav>
 
 @code {
     private string? currentUrl;
@@ -78,4 +77,3 @@
     }
 
 }
-
