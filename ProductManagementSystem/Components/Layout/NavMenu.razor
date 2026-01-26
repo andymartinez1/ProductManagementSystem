@@ -5,7 +5,7 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <a class="navbar-brand" href="">
-            <img src="images/Logo.png" alt="logo" class="logo"/>
+            <img src="images/logo.png" alt="logo" class="logo"/>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavCollapse"
                 aria-controls="topNavCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,7 +16,13 @@
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                        <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                        <i class="bi bi-house-door-fill"></i> Home
+                    </NavLink>
+                </li>
+
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="/products" Match="NavLinkMatch.All">
+                        <i class="bi bi-box-seam-fill"></i> Products
                     </NavLink>
                 </li>
 
@@ -24,8 +30,8 @@
                     <Authorized>
                         <li class="nav-item">
                             <NavLink class="nav-link" href="Account/Manage">
-                                                        <span class="bi bi-person-fill-nav-menu"
-                                                              aria-hidden="true"></span> @context.User.Identity?.Name
+                                <span aria-hidden="true"><i
+                                        class="bi bi-person-fill"></i></span> @context.User.Identity?.Name
                             </NavLink>
                         </li>
                         <li class="nav-item">
@@ -33,7 +39,7 @@
                                 <AntiforgeryToken/>
                                 <input type="hidden" name="ReturnUrl" value="@currentUrl"/>
                                 <button type="submit" class="btn btn-link nav-link p-0">
-                                    <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
+                                    <span aria-hidden="true"><i class="bi bi-arrow-bar-left"></i></span> Logout
                                 </button>
                             </form>
                         </li>
@@ -41,12 +47,13 @@
                     <NotAuthorized>
                         <li class="nav-item">
                             <NavLink class="nav-link" href="Account/Register">
-                                <span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
+                                <span aria-hidden="true"><i
+                                        class="bi bi-person-fill"></i></span> Register
                             </NavLink>
                         </li>
                         <li class="nav-item">
                             <NavLink class="nav-link" href="Account/Login">
-                                <span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Login
+                                <span aria-hidden="true"><i class="bi bi-person-badge-fill"></i></span> Login
                             </NavLink>
                         </li>
                     </NotAuthorized>

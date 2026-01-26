@@ -61,6 +61,7 @@ public class ProductService : IProductService
             throw new ArgumentException("ID does not exist.");
 
         productToUpdate.ProductName = updateRequest.ProductName;
+        productToUpdate.Category = updateRequest.Category;
         productToUpdate.Price = updateRequest.Price;
         productToUpdate.DateAdded = updateRequest.DateAdded;
         productToUpdate.IsActive = updateRequest.IsActive;

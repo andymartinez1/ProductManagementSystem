@@ -10,6 +10,7 @@ public static class ProductResponseExtension
         {
             Id = product.Id,
             ProductName = product.ProductName,
+            Category = product.Category,
             Price = product.Price,
             DateAdded = product.DateAdded,
             IsActive = product.IsActive,

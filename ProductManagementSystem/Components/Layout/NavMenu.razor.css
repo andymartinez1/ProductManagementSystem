@@ -1,7 +1,7 @@
 .navbar {
     width: 100%;
     margin-bottom: 1rem;
-    background-color: #333;
+    background-color: #7b7b7b;
 }
 
 .navbar-toggler {
@@ -30,12 +30,14 @@
 }
 
 .bi {
-    display: inline-block;
-    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
     width: 1.25rem;
     height: 1.25rem;
     margin-right: 0.5rem;
-    top: -1px;
+    top: 0;
     background-size: cover;
 }
 
@@ -52,16 +54,13 @@
 }
 
 .nav-item ::deep .nav-link {
-    color: #d7d7d7;
-    background: none;
-    border: none;
-    border-radius: 4px;
-    height: auto;
     display: flex;
     align-items: center;
+    gap: 0.1rem;
     padding: 0.5rem 0.75rem;
     line-height: 1;
     width: auto;
+    font-size: 1.2rem;
 }
 
 .nav-item ::deep a.active {

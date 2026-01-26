@@ -52,6 +52,21 @@ builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 
+// Initialize and seed the database
+using (var scope = app.Services.CreateAsyncScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        await SeedData.InitializeDataAsync(services);
+    }
+    catch (Exception e)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(e, "An error occured while seeding the database.");
+    }
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -59,11 +74,12 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    app.UseExceptionHandler("/Error", true);
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
     app.UseMigrationsEndPoint();
 }
+
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
 app.UseHttpsRedirection();
 

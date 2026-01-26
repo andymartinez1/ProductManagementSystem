@@ -1,9 +1,66 @@
 ﻿@page "/products"
-@* @inject *@
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using ProductManagementSystem.DTO
+@inject IProductService ProductService
+@inject NavigationManager NavigationManager
 
+<PageTitle>Products</PageTitle>
 
-<h3>Index</h3>
+@if (IsLoading)
+{
+    <div class="position-absolute w-75 h-75 d-flex flex-column align-items-center bg-white justify-content-center">
+        <img src="images/loading.gif" alt="loading"/>
+    </div>
+}
+else
+{
+    <div class="page-size-chooser">
+        Items per page:
+        <select @bind="@pagination.ItemsPerPage">
+            <option>5</option>
+            <option>10</option>
+            <option>20</option>
+            <option>50</option>
+        </select>
+    </div>
+    <div class="container-fluid">
+        <h1>Products</h1>
+        <QuickGrid @ref="productGrid" Items="AllProducts" ItemKey="p => p.Id" Pagination="@pagination"
+                   Class="table-responsive table-hover table-striped">
+            <PropertyColumn Property="@(p => p.ProductName)" Sortable="true"/>
+            <PropertyColumn Property="@(p => p.Category)" Sortable="true"/>
+            <PropertyColumn Property="@(p => p.Price)" Sortable="true"/>
+            <PropertyColumn Property="@(p => p.Quantity)" Sortable="true"/>
+            <PropertyColumn Property="@(p => p.DateAdded)" Sortable="true"/>
+            <PropertyColumn Property="@(p => p.IsActive)" Sortable="true"/>
+        </QuickGrid>
+    </div>
+    <div>
+        <Paginator State="pagination"/>
+    </div>
+}
 
 @code {
+    private bool IsLoading { get; set; } = true;
+    private QuickGrid<ProductResponse> productGrid;
+    private PaginationState pagination = new() { ItemsPerPage = 10 };
+    private readonly string _categorySearch = string.Empty;
+    private List<string> _categories = [];
+    private List<ProductResponse> _allProducts = [];
+    private IQueryable<ProductResponse> AllProducts => _allProducts.AsQueryable();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _allProducts = await LoadProducts();
+
+        IsLoading = false;
+
+        StateHasChanged();
+    }
+
+    private async Task<List<ProductResponse>> LoadProducts()
+    {
+        return await ProductService.GetAllProducts();
+    }
 
 }
