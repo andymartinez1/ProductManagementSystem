@@ -3,6 +3,7 @@
 @using ProductManagementSystem.DTO
 @inject IProductService ProductService
 @inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
 <PageTitle>Products</PageTitle>
 
@@ -25,9 +26,15 @@ else
     </div>
     <div class="container-fluid">
         <h1>Products</h1>
-        <QuickGrid @ref="productGrid" Items="AllProducts" ItemKey="p => p.Id" Pagination="@pagination"
-                   Class="table-responsive table-hover table-striped">
-            <PropertyColumn Property="@(p => p.ProductName)" Sortable="true"/>
+        <QuickGrid Items="AllProducts" ItemKey="p => p.Id" Pagination="@pagination">
+            <PropertyColumn Property="@(p => p.ProductName)" Sortable="true">
+                <ColumnOptions>
+                    <div class="search-box">
+                        <input type="search" autofocus="autofocus" @bind="_nameSearch" @bind:event="oninput"
+                               placeholder="Product name"/>
+                    </div>
+                </ColumnOptions>
+            </PropertyColumn>
             <PropertyColumn Property="@(p => p.Category)" Sortable="true"/>
             <PropertyColumn Property="@(p => p.Price)" Sortable="true"/>
             <PropertyColumn Property="@(p => p.Quantity)" Sortable="true"/>
@@ -43,8 +50,9 @@ else
 @code {
     private bool IsLoading { get; set; } = true;
     private QuickGrid<ProductResponse> productGrid;
-    private PaginationState pagination = new() { ItemsPerPage = 10 };
-    private readonly string _categorySearch = string.Empty;
+    readonly PaginationState pagination = new() { ItemsPerPage = 10 };
+    private string _nameSearch = string.Empty;
+    private string _categorySearch = string.Empty;
     private List<string> _categories = [];
     private List<ProductResponse> _allProducts = [];
     private IQueryable<ProductResponse> AllProducts => _allProducts.AsQueryable();
@@ -54,8 +62,6 @@ else
         _allProducts = await LoadProducts();
 
         IsLoading = false;
-
-        StateHasChanged();
     }
 
     private async Task<List<ProductResponse>> LoadProducts()

@@ -5,7 +5,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-ProductManagementSystem-c4063d5f-5b10-4009-a92b-21222b73113d</UserSecretsId>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
-    <OutputType>WinExe</OutputType>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference

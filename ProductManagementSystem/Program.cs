@@ -29,6 +29,7 @@ builder
 var connectionString =
     builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString)
 );
@@ -47,7 +48,6 @@ builder
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
@@ -75,7 +75,6 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Error", true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
     app.UseMigrationsEndPoint();
 }
@@ -83,12 +82,20 @@ else
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
 app.UseHttpsRedirection();
 
+// Serve static files for interactive components
+app.UseStaticFiles();
+app.UseRouting();
+
+// Authentication / Authorization middleware if Identity endpoints are used
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseAntiforgery();
 
-app.MapStaticAssets();
+// Map interactive Razor Components (must be after routing/auth)
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
-// Add additional endpoints required by the Identity /Account Razor components.
+// Identity Razor endpoints
 app.MapAdditionalIdentityEndpoints();
 
 app.Run();
