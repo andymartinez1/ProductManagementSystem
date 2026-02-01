@@ -1,0 +1,11 @@
+@page "/products/delete/{ProductId:int}"
+@inject IProductService ProductService
+@rendermode InteractiveServer
+
+<PageTitle>Delete</PageTitle>
+
+<h3>Delete</h3>
+
+@code {
+    [Parameter] public int? ProductId { get; set; }
+}

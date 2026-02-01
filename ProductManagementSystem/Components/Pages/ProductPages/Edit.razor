@@ -1,0 +1,11 @@
+@page "/products/edit/{ProductId:int}"
+@inject IProductService ProductService
+@rendermode InteractiveServer
+
+<PageTitle>Edit</PageTitle>
+
+<h3>EditProduct</h3>
+
+@code {
+    [Parameter] public int? ProductId { get; set; }
+}

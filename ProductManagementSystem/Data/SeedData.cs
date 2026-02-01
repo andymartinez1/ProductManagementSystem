@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using ProductManagementSystem.Models;
 
 namespace ProductManagementSystem.Data;
@@ -14,7 +15,23 @@ public static class SeedData
         // Ensure database exists
         await context.Database.EnsureCreatedAsync();
 
-        // If table already contains data, skip seeding
+        // Seeds an application user for testing
+        var hasher = new PasswordHasher<ApplicationUser>();
+        context.Users.Add(
+            new ApplicationUser
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserName = "test@test.com",
+                NormalizedUserName = "TEST@TEST.COM",
+                Email = "test@test.com",
+                NormalizedEmail = "TEST@TEST.COM",
+                EmailConfirmed = true,
+                LockoutEnabled = false,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                PasswordHash = hasher.HashPassword(null, "Password1!")
+            });
+
+        // If table already contains products data, skip seeding
         if (await context.Products.AnyAsync())
             return;
 
@@ -27,7 +44,7 @@ public static class SeedData
                 Price = 29.99m,
                 Quantity = 150,
                 DateAdded = new DateTime(2025, 6, 1),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -36,7 +53,7 @@ public static class SeedData
                 Price = 89.50m,
                 Quantity = 75,
                 DateAdded = new DateTime(2025, 5, 20),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -45,7 +62,7 @@ public static class SeedData
                 Price = 19.95m,
                 Quantity = 200,
                 DateAdded = new DateTime(2025, 2, 10),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -54,7 +71,7 @@ public static class SeedData
                 Price = 12.00m,
                 Quantity = 500,
                 DateAdded = new DateTime(2024, 11, 15),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -63,7 +80,7 @@ public static class SeedData
                 Price = 59.99m,
                 Quantity = 40,
                 DateAdded = new DateTime(2025, 3, 5),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -72,7 +89,7 @@ public static class SeedData
                 Price = 24.99m,
                 Quantity = 120,
                 DateAdded = new DateTime(2025, 4, 12),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -81,7 +98,7 @@ public static class SeedData
                 Price = 34.00m,
                 Quantity = 80,
                 DateAdded = new DateTime(2025, 1, 18),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -90,7 +107,7 @@ public static class SeedData
                 Price = 199.99m,
                 Quantity = 25,
                 DateAdded = new DateTime(2024, 12, 1),
-                IsActive = false,
+                IsActive = false
             },
             new()
             {
@@ -99,7 +116,7 @@ public static class SeedData
                 Price = 8.50m,
                 Quantity = 300,
                 DateAdded = new DateTime(2025, 6, 10),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -108,7 +125,7 @@ public static class SeedData
                 Price = 14.75m,
                 Quantity = 60,
                 DateAdded = new DateTime(2024, 9, 30),
-                IsActive = true,
+                IsActive = true
             },
             // 30 additional items
             new()
@@ -118,7 +135,7 @@ public static class SeedData
                 Price = 15.99m,
                 Quantity = 220,
                 DateAdded = new DateTime(2025, 2, 2),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -127,7 +144,7 @@ public static class SeedData
                 Price = 27.49m,
                 Quantity = 140,
                 DateAdded = new DateTime(2025, 3, 14),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -136,7 +153,7 @@ public static class SeedData
                 Price = 9.99m,
                 Quantity = 360,
                 DateAdded = new DateTime(2024, 10, 5),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -145,7 +162,7 @@ public static class SeedData
                 Price = 22.00m,
                 Quantity = 180,
                 DateAdded = new DateTime(2025, 4, 1),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -154,7 +171,7 @@ public static class SeedData
                 Price = 7.50m,
                 Quantity = 420,
                 DateAdded = new DateTime(2024, 8, 20),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -163,7 +180,7 @@ public static class SeedData
                 Price = 39.99m,
                 Quantity = 95,
                 DateAdded = new DateTime(2025, 1, 7),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -172,7 +189,7 @@ public static class SeedData
                 Price = 64.99m,
                 Quantity = 50,
                 DateAdded = new DateTime(2025, 5, 25),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -181,7 +198,7 @@ public static class SeedData
                 Price = 14.99m,
                 Quantity = 210,
                 DateAdded = new DateTime(2025, 2, 28),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -190,7 +207,7 @@ public static class SeedData
                 Price = 89.99m,
                 Quantity = 30,
                 DateAdded = new DateTime(2025, 3, 30),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -199,7 +216,7 @@ public static class SeedData
                 Price = 34.99m,
                 Quantity = 110,
                 DateAdded = new DateTime(2024, 12, 18),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -208,7 +225,7 @@ public static class SeedData
                 Price = 49.99m,
                 Quantity = 85,
                 DateAdded = new DateTime(2025, 1, 25),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -217,7 +234,7 @@ public static class SeedData
                 Price = 39.50m,
                 Quantity = 130,
                 DateAdded = new DateTime(2024, 11, 2),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -226,7 +243,7 @@ public static class SeedData
                 Price = 24.99m,
                 Quantity = 70,
                 DateAdded = new DateTime(2025, 4, 8),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -235,7 +252,7 @@ public static class SeedData
                 Price = 12.99m,
                 Quantity = 250,
                 DateAdded = new DateTime(2025, 5, 2),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -244,7 +261,7 @@ public static class SeedData
                 Price = 29.95m,
                 Quantity = 60,
                 DateAdded = new DateTime(2024, 9, 12),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -253,7 +270,7 @@ public static class SeedData
                 Price = 22.00m,
                 Quantity = 90,
                 DateAdded = new DateTime(2025, 2, 15),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -262,7 +279,7 @@ public static class SeedData
                 Price = 19.99m,
                 Quantity = 75,
                 DateAdded = new DateTime(2025, 3, 20),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -271,7 +288,7 @@ public static class SeedData
                 Price = 34.99m,
                 Quantity = 48,
                 DateAdded = new DateTime(2024, 12, 6),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -280,7 +297,7 @@ public static class SeedData
                 Price = 17.50m,
                 Quantity = 160,
                 DateAdded = new DateTime(2025, 1, 12),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -289,7 +306,7 @@ public static class SeedData
                 Price = 21.00m,
                 Quantity = 40,
                 DateAdded = new DateTime(2024, 10, 28),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -298,7 +315,7 @@ public static class SeedData
                 Price = 59.99m,
                 Quantity = 55,
                 DateAdded = new DateTime(2025, 6, 5),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -307,7 +324,7 @@ public static class SeedData
                 Price = 13.99m,
                 Quantity = 140,
                 DateAdded = new DateTime(2025, 4, 20),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -316,7 +333,7 @@ public static class SeedData
                 Price = 11.50m,
                 Quantity = 220,
                 DateAdded = new DateTime(2025, 2, 27),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -325,7 +342,7 @@ public static class SeedData
                 Price = 44.99m,
                 Quantity = 65,
                 DateAdded = new DateTime(2025, 3, 9),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -334,7 +351,7 @@ public static class SeedData
                 Price = 9.50m,
                 Quantity = 300,
                 DateAdded = new DateTime(2024, 11, 22),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -343,7 +360,7 @@ public static class SeedData
                 Price = 18.99m,
                 Quantity = 95,
                 DateAdded = new DateTime(2025, 5, 18),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -352,7 +369,7 @@ public static class SeedData
                 Price = 24.00m,
                 Quantity = 120,
                 DateAdded = new DateTime(2025, 1, 5),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -361,7 +378,7 @@ public static class SeedData
                 Price = 12.99m,
                 Quantity = 180,
                 DateAdded = new DateTime(2024, 9, 5),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -370,7 +387,7 @@ public static class SeedData
                 Price = 16.99m,
                 Quantity = 85,
                 DateAdded = new DateTime(2025, 2, 9),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -379,8 +396,8 @@ public static class SeedData
                 Price = 11.99m,
                 Quantity = 200,
                 DateAdded = new DateTime(2025, 4, 3),
-                IsActive = true,
-            },
+                IsActive = true
+            }
         };
 
         await context.AddRangeAsync(products);

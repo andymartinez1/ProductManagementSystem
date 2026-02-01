@@ -9,6 +9,7 @@ using ProductManagementSystem.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddRazorPages();
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 builder.Services.AddCascadingAuthenticationState();
@@ -79,7 +80,6 @@ else
     app.UseMigrationsEndPoint();
 }
 
-app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
 app.UseHttpsRedirection();
 
 // Serve static files for interactive components
@@ -90,12 +90,13 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseAntiforgery();
-
-// Map interactive Razor Components (must be after routing/auth)
-app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
+app.MapStaticAssets();
+app.MapRazorPages();
 
 // Identity Razor endpoints
 app.MapAdditionalIdentityEndpoints();
+app.UseAntiforgery();
+
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 app.Run();

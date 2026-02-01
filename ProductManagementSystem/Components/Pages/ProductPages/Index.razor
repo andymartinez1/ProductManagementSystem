@@ -26,8 +26,9 @@ else
     </div>
     <div class="container-fluid">
         <h1>Products</h1>
-        <QuickGrid Items="AllProducts" ItemKey="p => p.Id" Pagination="@pagination">
-            <PropertyColumn Property="@(p => p.ProductName)" Sortable="true">
+        <QuickGrid Items="AllProducts" ItemKey="p => p.Id" Pagination="@pagination" Theme="none"
+                   Class="table table-striped table-hover">
+            <PropertyColumn Property="@(p => p.ProductName)" Title="Product Name" Sortable="true">
                 <ColumnOptions>
                     <div class="search-box">
                         <input type="search" autofocus="autofocus" @bind="_nameSearch" @bind:event="oninput"
@@ -38,8 +39,16 @@ else
             <PropertyColumn Property="@(p => p.Category)" Sortable="true"/>
             <PropertyColumn Property="@(p => p.Price)" Sortable="true"/>
             <PropertyColumn Property="@(p => p.Quantity)" Sortable="true"/>
-            <PropertyColumn Property="@(p => p.DateAdded)" Sortable="true"/>
-            <PropertyColumn Property="@(p => p.IsActive)" Sortable="true"/>
+            <PropertyColumn Property="@(p => p.DateAdded)" Title="Date Added" Format="MM-dd-yyyy hh:mm"
+                            Sortable="true"/>
+            <TemplateColumn Title="Is Active?">
+                <input class="form-check-input" type="checkbox" checked="@context.IsActive" disabled/>
+            </TemplateColumn>
+            <TemplateColumn Title="Actions" Context="product">
+                <button class="btn btn-outline-primary" @onclick="() => Edit(product.Id)">Edit</button>
+                <button class="btn btn-outline-secondary" @onclick="() => Details(product.Id)">Details</button>
+                <button class="btn btn-outline-danger" @onclick="() => Delete(product.Id)">Delete</button>
+            </TemplateColumn>
         </QuickGrid>
     </div>
     <div>
@@ -67,6 +76,21 @@ else
     private async Task<List<ProductResponse>> LoadProducts()
     {
         return await ProductService.GetAllProducts();
+    }
+
+    private void Edit(object productId)
+    {
+        NavigationManager.NavigateTo($"/products/edit/{productId}");
+    }
+
+    private void Details(object productId)
+    {
+        NavigationManager.NavigateTo($"/products/details/{productId}");
+    }
+
+    private void Delete(object productId)
+    {
+        NavigationManager.NavigateTo($"/products/delete/{productId}");
     }
 
 }
