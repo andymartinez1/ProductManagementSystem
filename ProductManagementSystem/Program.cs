@@ -44,6 +44,7 @@ builder
         options.SignIn.RequireConfirmedAccount = true;
         options.Stores.SchemaVersion = IdentitySchemaVersions.Version3;
     })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
@@ -60,11 +61,12 @@ using (var scope = app.Services.CreateAsyncScope())
     try
     {
         await SeedData.InitializeDataAsync(services);
+        app.Logger.LogInformation("Seeding database succeeded.");
     }
     catch (Exception e)
     {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(e, "An error occured while seeding the database.");
+        app.Logger.LogError(e, "An error occured while seeding the database.");
+        throw;
     }
 }
 

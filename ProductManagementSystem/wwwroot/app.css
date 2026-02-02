@@ -56,6 +56,16 @@ h1:focus {
     padding: 1rem;
 }
 
+.table td,
+.table th {
+    color: #000 !important;
+}
+
+/*Removes empty table rows*/
+.table tbody tr:not([aria-rowindex]) {
+    display: none;
+}
+
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
 }

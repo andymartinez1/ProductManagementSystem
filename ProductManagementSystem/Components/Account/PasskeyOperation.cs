@@ -1,8 +1,7 @@
-namespace ProductManagementSystem.Components.Account
+namespace ProductManagementSystem.Components.Account;
+
+public enum PasskeyOperation
 {
-    public enum PasskeyOperation
-    {
-        Create = 0,
-        Request = 1,
-    }
+    Create = 0,
+    Request = 1,
 }

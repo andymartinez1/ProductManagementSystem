@@ -1,6 +1,4 @@
 ﻿@page "/products"
-@using Microsoft.AspNetCore.Components.QuickGrid
-@using ProductManagementSystem.DTO
 @inject IProductService ProductService
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
@@ -42,7 +40,7 @@ else
             </div>
             <div class="col-auto page-size-chooser d-flex align-items-center">
                 <label class="me-2 mb-0">Items per page:</label>
-                <select class="form-select form-select-sm" style="width: auto;" @bind="pagination.ItemsPerPage">
+                <select class="form-select form-select-sm" style="width: auto;" @bind="_pagination.ItemsPerPage">
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="20">20</option>
@@ -54,7 +52,7 @@ else
             </div>
         </div>
 
-        <QuickGrid Items="AllProducts" ItemKey="p => p.Id" Pagination="@pagination" Theme="none"
+        <QuickGrid Items="AllProducts" ItemKey="p => p.Id" Pagination="@_pagination" Theme="none"
                    Class="table table-striped table-hover">
             <PropertyColumn Property="@(p => p.ProductName)" Title="Product Name" Sortable="true" Align="Align.Center"
                             IsDefaultSortColumn="true"/>
@@ -74,14 +72,14 @@ else
         </QuickGrid>
     </div>
     <div>
-        <Paginator State="pagination"/>
+        <Paginator State="_pagination"/>
     </div>
 }
 
 @code {
     private bool IsLoading { get; set; } = true;
     private QuickGrid<ProductResponse> productGrid;
-    readonly PaginationState pagination = new() { ItemsPerPage = 10 };
+    readonly PaginationState _pagination = new() { ItemsPerPage = 10 };
     private string _nameSearch = string.Empty;
     private string _categorySearch = string.Empty;
     private DateTime? _startDate = DateTime.MinValue;
@@ -89,9 +87,11 @@ else
     private List<ProductResponse> _allProducts = new();
 
     private IQueryable<ProductResponse> AllProducts => _allProducts
-        .Where(p => p.ProductName.Contains(_nameSearch, StringComparison.OrdinalIgnoreCase))
-        .Where(p => p.Category.Contains(_categorySearch, StringComparison.OrdinalIgnoreCase))
-        .Where(p => p.DateAdded >= _startDate && p.DateAdded <= _endDate)
+        .Where(p => (p.ProductName ?? "").Contains(_nameSearch, StringComparison.OrdinalIgnoreCase))
+        .Where(p => (p.Category ?? "").Contains(_categorySearch, StringComparison.OrdinalIgnoreCase))
+        .Where(p =>
+            (!_startDate.HasValue || p.DateAdded >= _startDate.Value) &&
+            (!_endDate.HasValue || p.DateAdded <= _endDate.Value))
         .AsQueryable();
 
     protected override async Task OnInitializedAsync()

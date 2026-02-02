@@ -1,0 +1,76 @@
+﻿@page "/employees"
+@inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "Admin")]
+@rendermode InteractiveServer
+
+@inject UserManager<ApplicationUser> UserManager
+
+<h3>Employees</h3>
+
+@if (Users is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>Total users: @Users.Count</p>
+
+    <div class="container-fluid">
+        <QuickGrid Items="AllUsers" ItemKey="u => u.Id" Pagination="@_pagination" Theme="none"
+                   Class="table table-striped table-hover">
+            <PropertyColumn Property="u => u.UserName" Align="Align.Center" Title="Username"/>
+            <TemplateColumn Title="Role" Context="u" Align="Align.Center">
+                @GetRolesText(u.Id)
+            </TemplateColumn>
+            <PropertyColumn Property="u => u.Email" Align="Align.Center"/>
+            <TemplateColumn Align="Align.Center" Title="Email Confirmed?">
+                <input class="form-check-input" type="checkbox" checked="@context.EmailConfirmed" disabled/>
+            </TemplateColumn>
+            <TemplateColumn Title="Actions" Context="u" Align="Align.Center">
+                <button class="btn btn-outline-primary" @onclick="() => Edit(u.Id)">Edit</button>
+                <button class="btn btn-outline-danger" @onclick="() => Delete(u.Id)">Delete</button>
+            </TemplateColumn>
+        </QuickGrid>
+    </div>
+
+    <div>
+        <Paginator State="_pagination"/>
+    </div>
+}
+
+@code {
+    readonly PaginationState _pagination = new() { ItemsPerPage = 10 };
+    private List<ApplicationUser>? Users { get; set; }
+    private IQueryable<ApplicationUser> AllUsers => Users.AsQueryable();
+    private readonly Dictionary<string, IList<string>> _rolesByUserId = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Users = await UserManager.Users.ToListAsync();
+
+        foreach (var user in Users)
+        {
+            var roles = await UserManager.GetRolesAsync(user);
+
+            _rolesByUserId[user.Id] = roles;
+        }
+    }
+
+    private string GetRolesText(string userId)
+    {
+        return _rolesByUserId.TryGetValue(userId, out var roles) && roles.Count > 0
+            ? string.Join(", ", roles)
+            : "(none)";
+    }
+
+    private void Edit(object userId)
+    {
+        NavigationManager.NavigateTo($"/employees/edit/{userId}");
+    }
+
+    private void Delete(object userId)
+    {
+        NavigationManager.NavigateTo($"/employees/delete/{userId}");
+    }
+
+}

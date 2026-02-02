@@ -12,7 +12,7 @@ using ProductManagementSystem.Data;
 namespace ProductManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260126003531_Initial")]
+    [Migration("20260202170300_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -263,7 +263,7 @@ namespace ProductManagementSystem.Migrations
                         .HasColumnType("bit");
 
                     b.Property<decimal?>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("ProductName")
                         .HasColumnType("nvarchar(max)");

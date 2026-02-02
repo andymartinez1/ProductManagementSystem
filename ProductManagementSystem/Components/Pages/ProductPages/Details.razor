@@ -1,11 +1,61 @@
 @page "/products/details/{ProductId:int}"
 @inject IProductService ProductService
+@inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
 <PageTitle>Details</PageTitle>
 
 <h1>Details</h1>
 
+<div>
+    @if (Product is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <dl class="row">
+            <dt class="col-sm-2">Product Name</dt>
+            <dd class="col-sm-10">@Product.ProductName</dd>
+            <dt class="col-sm-2">Category</dt>
+            <dd class="col-sm-10">@Product.Category</dd>
+            <dt class="col-sm-2">Price</dt>
+            <dd class="col-sm-10">@Product.Price</dd>
+            <dt class="col-sm-2">Quantity</dt>
+            <dd class="col-sm-10">@Product.Quantity</dd>
+            <dt class="col-sm-2">Date Added</dt>
+            <dd class="col-sm-10">@Product.DateAdded</dd>
+            <dt class="col-sm-2">Is Active?</dt>
+            <dd class="col-sm-10">@(Product.IsActive ? "Active" : "Inactive")</dd>
+        </dl>
+        <div>
+            <button class="btn btn-info" @onclick="() => Edit(Product.Id)">Edit</button>
+            <button class="btn btn-secondary" @onclick="Home">Go Back</button>
+        </div>
+    }
+</div>
+
 @code {
     [Parameter] public int? ProductId { get; set; }
+
+    private ProductResponse? Product { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ProductId is not null)
+        {
+            Product = await ProductService.GetProduct(ProductId.Value);
+        }
+    }
+
+    private void Edit(object productId)
+    {
+        NavigationManager.NavigateTo($"/products/edit/{productId}");
+    }
+
+    private void Home()
+    {
+        NavigationManager.NavigateTo("/products");
+    }
+
 }

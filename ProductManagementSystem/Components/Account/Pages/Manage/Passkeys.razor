@@ -1,8 +1,4 @@
 ﻿@page "/Account/Manage/Passkeys"
-
-@using ProductManagementSystem.Data
-@using Microsoft.AspNetCore.Identity
-@using System.ComponentModel.DataAnnotations
 @using System.Buffers.Text
 
 @inject UserManager<ApplicationUser> UserManager
@@ -13,31 +9,35 @@
 
 <h3>Manage your passkeys</h3>
 
-<StatusMessage />
+<StatusMessage/>
 
 @if (currentPasskeys is { Count: > 0 })
 {
     <table class="table">
         <tbody>
-            @foreach (var passkey in currentPasskeys)
-            {
-                <tr>
-                    <td>@(passkey.Name ?? "Unnamed passkey")</td>
-                    <td>
-                        @{
-                            var credentialId = Base64Url.EncodeToString(passkey.CredentialId);
-                        }
-                        <form @formname="@($"update-passkey-{credentialId}")" @onsubmit="UpdatePasskey" method="post">
-                            <AntiforgeryToken />
-                            <div>
-                                <input type="hidden" name="CredentialId" value="@credentialId" />
-                                <button type="submit" name="Action" value="rename" class="btn btn-primary" title="Rename this passkey">Rename</button>
-                                <button type="submit" name="Action" value="delete" class="btn btn-danger" title="Remove this passkey from your account">Delete</button>
-                            </div>
-                        </form>
-                    </td>
-                </tr>
-            }
+        @foreach (var passkey in currentPasskeys)
+        {
+            <tr>
+                <td>@(passkey.Name ?? "Unnamed passkey")</td>
+                <td>
+                    @{
+                        var credentialId = Base64Url.EncodeToString(passkey.CredentialId);
+                    }
+                    <form @formname="@($"update-passkey-{credentialId}")" @onsubmit="UpdatePasskey" method="post">
+                        <AntiforgeryToken/>
+                        <div>
+                            <input type="hidden" name="CredentialId" value="@credentialId"/>
+                            <button type="submit" name="Action" value="rename" class="btn btn-primary"
+                                    title="Rename this passkey">Rename
+                            </button>
+                            <button type="submit" name="Action" value="delete" class="btn btn-danger"
+                                    title="Remove this passkey from your account">Delete
+                            </button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        }
         </tbody>
     </table>
 }
@@ -47,14 +47,16 @@ else
 }
 
 <form @formname="add-passkey" @onsubmit="AddPasskey" method="post">
-    <AntiforgeryToken />
+    <AntiforgeryToken/>
     @if (currentPasskeys is { Count: >= MaxPasskeyCount })
     {
-        <p class="text-danger">You have reached the maximum number of allowed passkeys. Please delete one before adding a new one.</p>
+        <p class="text-danger">You have reached the maximum number of allowed passkeys. Please delete one before adding
+            a new one.</p>
     }
     else
     {
-        <PasskeySubmit Operation="PasskeyOperation.Create" Name="Input" class="btn btn-primary">Add a new passkey</PasskeySubmit>
+        <PasskeySubmit Operation="PasskeyOperation.Create" Name="Input" class="btn btn-primary">Add a new passkey
+        </PasskeySubmit>
     }
 
 </form>
@@ -65,21 +67,18 @@ else
     private ApplicationUser? user;
     private IList<UserPasskeyInfo>? currentPasskeys;
 
-    [CascadingParameter]
-    private HttpContext HttpContext { get; set; } = default!;
+    [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
 
-    [SupplyParameterFromForm]
-    private string? Action { get; set; }
+    [SupplyParameterFromForm] private string? Action { get; set; }
 
-    [SupplyParameterFromForm]
-    private string? CredentialId { get; set; }
+    [SupplyParameterFromForm] private string? CredentialId { get; set; }
 
     [SupplyParameterFromForm(FormName = "add-passkey")]
     private PasskeyInputModel Input { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()
     {
-        Input ??= new();
+        Input ??= new PasskeyInputModel();
 
         user = await UserManager.GetUserAsync(HttpContext.User);
         if (user is null)
@@ -87,6 +86,7 @@ else
             RedirectManager.RedirectToInvalidUser(UserManager, HttpContext);
             return;
         }
+
         currentPasskeys = await UserManager.GetPasskeysAsync(user);
     }
 
@@ -112,7 +112,7 @@ else
 
         if (currentPasskeys!.Count >= MaxPasskeyCount)
         {
-            RedirectManager.RedirectToCurrentPageWithStatus($"Error: You have reached the maximum number of allowed passkeys.", HttpContext);
+            RedirectManager.RedirectToCurrentPageWithStatus("Error: You have reached the maximum number of allowed passkeys.", HttpContext);
             return;
         }
 
@@ -179,4 +179,5 @@ else
 
         RedirectManager.RedirectToCurrentPageWithStatus("Passkey deleted successfully.", HttpContext);
     }
+
 }
