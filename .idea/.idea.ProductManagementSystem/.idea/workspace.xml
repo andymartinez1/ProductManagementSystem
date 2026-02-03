@@ -10,15 +10,14 @@
   <component name="ChangeListManager">
     <list default="true" id="b3867fd2-f5dc-4252-87e4-cd80406a099f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ProductManagementSystem/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProductManagementSystem/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProductManagementSystem.IntegrationTests/ProductManagementSystem.IntegrationTests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/ProductManagementSystem.IntegrationTests/ProductManagementSystem.IntegrationTests.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProductManagementSystem.UnitTests/ProductManagementSystem.UnitTests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/ProductManagementSystem.UnitTests/ProductManagementSystem.UnitTests.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProductManagementSystem/Components/App.razor" beforeDir="false" afterPath="$PROJECT_DIR$/ProductManagementSystem/Components/App.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProductManagementSystem/Components/Layout/NavMenu.razor" beforeDir="false" afterPath="$PROJECT_DIR$/ProductManagementSystem/Components/Layout/NavMenu.razor" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProductManagementSystem/Components/Layout/NavMenu.razor.css" beforeDir="false" afterPath="$PROJECT_DIR$/ProductManagementSystem/Components/Layout/NavMenu.razor.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProductManagementSystem/Components/Pages/ProductResponsePages/Index.razor" beforeDir="false" afterPath="$PROJECT_DIR$/ProductManagementSystem/Components/Pages/ProductPages/Index.razor" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProductManagementSystem/Data/SeedData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ProductManagementSystem/Data/SeedData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProductManagementSystem/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ProductManagementSystem/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProductManagementSystem/ProductManagementSystem.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/ProductManagementSystem/ProductManagementSystem.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProductManagementSystem/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ProductManagementSystem/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProductManagementSystem/Components/Pages/ProductPages/Create.razor" beforeDir="false" afterPath="$PROJECT_DIR$/ProductManagementSystem/Components/Pages/ProductPages/Create.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProductManagementSystem/Components/Pages/ProductPages/Delete.razor" beforeDir="false" afterPath="$PROJECT_DIR$/ProductManagementSystem/Components/Pages/ProductPages/Delete.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProductManagementSystem/Components/Pages/ProductPages/Details.razor" beforeDir="false" afterPath="$PROJECT_DIR$/ProductManagementSystem/Components/Pages/ProductPages/Details.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProductManagementSystem/Components/Pages/ProductPages/Edit.razor" beforeDir="false" afterPath="$PROJECT_DIR$/ProductManagementSystem/Components/Pages/ProductPages/Edit.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProductManagementSystem/Components/Pages/ProductPages/Index.razor" beforeDir="false" afterPath="$PROJECT_DIR$/ProductManagementSystem/Components/Pages/ProductPages/Index.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProductManagementSystem/wwwroot/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/ProductManagementSystem/wwwroot/app.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,26 +72,26 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.ProductManagementSystem: http.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Launch Settings Profile.ProductManagementSystem: https.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;rider.code.cleanup.on.save&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;actions.on.save&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.ProductManagementSystem: http.executor": "Run",
+    ".NET Launch Settings Profile.ProductManagementSystem: https.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "rider.code.cleanup.on.save": "true",
+    "settings.editor.selected.configurable": "HotReloadSettingsPage",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.ProductManagementSystem: https">
     <configuration name="ProductManagementSystem: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/ProductManagementSystem/ProductManagementSystem.csproj" />
@@ -183,7 +182,7 @@
       <workItem from="1769386422441" duration="10403000" />
       <workItem from="1769408490615" duration="2368000" />
       <workItem from="1769454947242" duration="3742000" />
-      <workItem from="1769978046905" duration="5800000" />
+      <workItem from="1769978046905" duration="15671000" />
     </task>
     <task id="LOCAL-00001" summary="Created the basic project structure and added 2 new projects for testing.">
       <option name="closed" value="true" />
@@ -233,7 +232,15 @@
       <option name="project" value="LOCAL" />
       <updated>1769472880972</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Seeded a test user. Added product create, edit, details and delete pages. Updated the index page to look better and have routes to those pages.">
+      <option name="closed" value="true" />
+      <created>1769986412087</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1769986412087</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -260,7 +267,8 @@
     <MESSAGE value="Added a product service and added it to the dependency injection container in Program.cs." />
     <MESSAGE value="Made some styling changes and added seed data. Added an index page for all products and added pagination and some sorting and searching functionality." />
     <MESSAGE value="Fixed issue with interactive server not working. Had to remove WinExe from the .csproj file. Added some data annotations to the response DTO." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed issue with interactive server not working. Had to remove WinExe from the .csproj file. Added some data annotations to the response DTO." />
+    <MESSAGE value="Seeded a test user. Added product create, edit, details and delete pages. Updated the index page to look better and have routes to those pages." />
+    <option name="LAST_COMMIT_MESSAGE" value="Seeded a test user. Added product create, edit, details and delete pages. Updated the index page to look better and have routes to those pages." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

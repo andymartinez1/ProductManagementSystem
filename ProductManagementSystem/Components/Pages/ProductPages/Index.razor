@@ -15,36 +15,58 @@
 }
 else
 {
-    <div class="page-size-chooser">
-        Items per page:
-        <select @bind="@pagination.ItemsPerPage">
-            <option>5</option>
-            <option>10</option>
-            <option>20</option>
-            <option>50</option>
-        </select>
-    </div>
     <div class="container-fluid">
-        <h1>Products</h1>
+        <div class="row align-items-center justify-content-between g-2 mb-3">
+            <div class="col-auto">
+                <h1>Products</h1>
+            </div>
+            <div class="col-auto search-box">
+                <label>Name</label>
+                <input class="form-control" type="search" @bind="_nameSearch" @bind:event="oninput"
+                       placeholder="Search by name"/>
+            </div>
+            <div class="col-auto search-box">
+                <label>Category</label>
+                <input class="form-control" type="search" @bind="_categorySearch" @bind:event="oninput"
+                       placeholder="Search by category"/>
+            </div>
+            <div class="col-auto search-box">
+                <label>Start Date</label>
+                <input class="form-control" type="datetime-local" @bind="_startDate" @bind:event="oninput"
+                       placeholder="Start"/>
+            </div>
+            <div class="col-auto search-box">
+                <label>End Date</label>
+                <input class="form-control" type="datetime-local" @bind="_endDate" @bind:event="oninput"
+                       placeholder="End"/>
+            </div>
+            <div class="col-auto page-size-chooser d-flex align-items-center">
+                <label class="me-2 mb-0">Items per page:</label>
+                <select class="form-select form-select-sm" style="width: auto;" @bind="pagination.ItemsPerPage">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-outline-info" @onclick="Create">Add Product</button>
+            </div>
+        </div>
+
         <QuickGrid Items="AllProducts" ItemKey="p => p.Id" Pagination="@pagination" Theme="none"
                    Class="table table-striped table-hover">
-            <PropertyColumn Property="@(p => p.ProductName)" Title="Product Name" Sortable="true">
-                <ColumnOptions>
-                    <div class="search-box">
-                        <input type="search" autofocus="autofocus" @bind="_nameSearch" @bind:event="oninput"
-                               placeholder="Product name"/>
-                    </div>
-                </ColumnOptions>
-            </PropertyColumn>
-            <PropertyColumn Property="@(p => p.Category)" Sortable="true"/>
-            <PropertyColumn Property="@(p => p.Price)" Sortable="true"/>
-            <PropertyColumn Property="@(p => p.Quantity)" Sortable="true"/>
+            <PropertyColumn Property="@(p => p.ProductName)" Title="Product Name" Sortable="true" Align="Align.Center"
+                            IsDefaultSortColumn="true"/>
+            <PropertyColumn Property="@(p => p.Category)" Sortable="true" Align="Align.Center"/>
+            <PropertyColumn Property="@(p => p.Price)" Sortable="true" Align="Align.Center"/>
+            <PropertyColumn Property="@(p => p.Quantity)" Sortable="true" Align="Align.Center"/>
             <PropertyColumn Property="@(p => p.DateAdded)" Title="Date Added" Format="MM-dd-yyyy hh:mm"
-                            Sortable="true"/>
-            <TemplateColumn Title="Is Active?">
+                            Align="Align.Center"/>
+            <TemplateColumn Title="Is Active?" Align="Align.Center">
                 <input class="form-check-input" type="checkbox" checked="@context.IsActive" disabled/>
             </TemplateColumn>
-            <TemplateColumn Title="Actions" Context="product">
+            <TemplateColumn Title="Actions" Context="product" Align="Align.Center">
                 <button class="btn btn-outline-primary" @onclick="() => Edit(product.Id)">Edit</button>
                 <button class="btn btn-outline-secondary" @onclick="() => Details(product.Id)">Details</button>
                 <button class="btn btn-outline-danger" @onclick="() => Delete(product.Id)">Delete</button>
@@ -62,13 +84,22 @@ else
     readonly PaginationState pagination = new() { ItemsPerPage = 10 };
     private string _nameSearch = string.Empty;
     private string _categorySearch = string.Empty;
-    private List<string> _categories = [];
-    private List<ProductResponse> _allProducts = [];
-    private IQueryable<ProductResponse> AllProducts => _allProducts.AsQueryable();
+    private DateTime? _startDate = DateTime.MinValue;
+    private DateTime? _endDate = DateTime.MaxValue;
+    private List<ProductResponse> _allProducts = new();
+
+    private IQueryable<ProductResponse> AllProducts => _allProducts
+        .Where(p => p.ProductName.Contains(_nameSearch, StringComparison.OrdinalIgnoreCase))
+        .Where(p => p.Category.Contains(_categorySearch, StringComparison.OrdinalIgnoreCase))
+        .Where(p => p.DateAdded >= _startDate && p.DateAdded <= _endDate)
+        .AsQueryable();
 
     protected override async Task OnInitializedAsync()
     {
         _allProducts = await LoadProducts();
+
+        _startDate = _allProducts.Min(p => p.DateAdded);
+        _endDate = _allProducts.Max(p => p.DateAdded);
 
         IsLoading = false;
     }
@@ -91,6 +122,11 @@ else
     private void Delete(object productId)
     {
         NavigationManager.NavigateTo($"/products/delete/{productId}");
+    }
+
+    private void Create()
+    {
+        NavigationManager.NavigateTo("/products/create");
     }
 
 }
