@@ -15,18 +15,29 @@ else
 {
     <div class="container-fluid">
         <div class="row align-items-center justify-content-between g-2 mb-3">
-            <div class="col-auto">
-                <h1>Products</h1>
+            <div class="col-md-3">
+                <ProductCard Title="Total Items" IconClass="bi bi-box-seam" Count=@_totalItems
+                             ShortDescription="Across all locations"/>
             </div>
-            <div class="col-auto search-box">
-                <label>Name</label>
-                <input class="form-control" type="search" @bind="_nameSearch" @bind:event="oninput"
-                       placeholder="Search by name"/>
+            <div class="col-md-3">
+                <ProductCard Title="Low Stock Items" IconClass="bi bi-exclamation-triangle" Count=@_totalLowStockItems
+                             ShortDescription="Require restocking"/>
             </div>
-            <div class="col-auto search-box">
-                <label>Category</label>
-                <input class="form-control" type="search" @bind="_categorySearch" @bind:event="oninput"
-                       placeholder="Search by category"/>
+            <div class="col-md-3">
+                <ProductCard Title="Total Value" IconClass="bi bi-graph-up-arrow" Count=@($"${_totalPrice}")
+                             ShortDescription="Current inventory value"/>
+            </div>
+            <div class="col-md-3">
+                <ProductCard Title="Categories" IconClass="bi bi-tags" Count=@_categoryCount
+                             ShortDescription="Product categories"/>
+            </div>
+        </div>
+
+        <div class="row align-items-center justify-content-between g-2 mb-3">
+            <div class="col-5 search-box">
+                <label>Search</label>
+                <input class="form-control" type="search" @bind="GeneralSearch" @bind:event="oninput"
+                       placeholder="Search by name or category.."/>
             </div>
             <div class="col-auto search-box">
                 <label>Start Date</label>
@@ -53,7 +64,7 @@ else
         </div>
 
         <QuickGrid Items="AllProducts" ItemKey="p => p.Id" Pagination="@_pagination" Theme="none"
-                   Class="table table-striped table-hover">
+                   Class="table table-hover">
             <PropertyColumn Property="@(p => p.ProductName)" Title="Product Name" Sortable="true" Align="Align.Center"
                             IsDefaultSortColumn="true"/>
             <PropertyColumn Property="@(p => p.Category)" Sortable="true" Align="Align.Center"/>
@@ -65,9 +76,10 @@ else
                 <input class="form-check-input" type="checkbox" checked="@context.IsActive" disabled/>
             </TemplateColumn>
             <TemplateColumn Title="Actions" Context="product" Align="Align.Center">
-                <button class="btn btn-outline-primary" @onclick="() => Edit(product.Id)">Edit</button>
-                <button class="btn btn-outline-secondary" @onclick="() => Details(product.Id)">Details</button>
-                <button class="btn btn-outline-danger" @onclick="() => Delete(product.Id)">Delete</button>
+                <button class="btn btn-outline-primary" @onclick="() => Edit(product.Id)"><i
+                        class="bi bi-pencil-square"></i></button>
+                <button class="btn btn-outline-danger" @onclick="() => Delete(product.Id)"><i class="bi bi-trash3"></i>
+                </button>
             </TemplateColumn>
         </QuickGrid>
     </div>
@@ -82,9 +94,22 @@ else
     readonly PaginationState _pagination = new() { ItemsPerPage = 10 };
     private string _nameSearch = string.Empty;
     private string _categorySearch = string.Empty;
+    private string GeneralSearch
+    {
+        get => _nameSearch;
+        set
+        {
+            _nameSearch = value;
+            _categorySearch = value;
+        }
+    }
     private DateTime? _startDate = DateTime.MinValue;
     private DateTime? _endDate = DateTime.MaxValue;
     private List<ProductResponse> _allProducts = new();
+    private string? _totalItems;
+    private string? _totalLowStockItems;
+    private string? _totalPrice;
+    private string? _categoryCount;
 
     private IQueryable<ProductResponse> AllProducts => _allProducts
         .Where(p => (p.ProductName ?? "").Contains(_nameSearch, StringComparison.OrdinalIgnoreCase))
@@ -100,6 +125,11 @@ else
 
         _startDate = _allProducts.Min(p => p.DateAdded);
         _endDate = _allProducts.Max(p => p.DateAdded);
+
+        _totalItems = _allProducts.Sum(p => p.Quantity).ToString();
+        _totalPrice = _allProducts.Sum(p => (p.Price ?? 0) * (p.Quantity ?? 0)).ToString("N2");
+        _totalLowStockItems = _allProducts.Count(p => (p.Quantity ?? 0) <= 10).ToString();
+        _categoryCount = _allProducts.Select(p => p.Category).Distinct().Count().ToString();
 
         IsLoading = false;
     }

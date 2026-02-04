@@ -50,15 +50,10 @@ h1:focus {
 }
 
 .table {
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     padding: 1rem;
-}
-
-.table td,
-.table th {
-    color: #000 !important;
 }
 
 /*Removes empty table rows*/

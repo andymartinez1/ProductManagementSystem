@@ -17,7 +17,7 @@ else
 
     <div class="container-fluid">
         <QuickGrid Items="AllUsers" ItemKey="u => u.Id" Pagination="@_pagination" Theme="none"
-                   Class="table table-striped table-hover">
+                   Class="table table-hover">
             <PropertyColumn Property="u => u.UserName" Align="Align.Center" Title="Username"/>
             <TemplateColumn Title="Role" Context="u" Align="Align.Center">
                 @GetRolesText(u.Id)
