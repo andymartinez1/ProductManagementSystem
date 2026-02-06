@@ -72,7 +72,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        Product = await ProductService.GetProduct(ProductId);
+        Product = await ProductService.GetProductAsync(ProductId);
 
         if (Product is null)
         {
@@ -100,7 +100,7 @@ else
             return;
         }
 
-        await ProductService.UpdateProduct(ProductUpdateRequest);
+        await ProductService.UpdateProductAsync(ProductUpdateRequest);
 
         NavigationManager.NavigateTo("/products");
     }

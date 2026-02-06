@@ -32,7 +32,7 @@ var connectionString =
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString)
+    options.UseSqlServer(connectionString, sql => sql.EnableRetryOnFailure())
 );
 
 builder.Services.AddQuickGridEntityFrameworkAdapter();

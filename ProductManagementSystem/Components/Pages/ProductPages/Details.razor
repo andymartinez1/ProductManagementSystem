@@ -44,7 +44,7 @@
     {
         if (ProductId is not null)
         {
-            Product = await ProductService.GetProduct(ProductId.Value);
+            Product = await ProductService.GetProductAsync(ProductId.Value);
         }
     }
 

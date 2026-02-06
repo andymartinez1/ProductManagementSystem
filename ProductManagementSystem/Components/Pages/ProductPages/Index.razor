@@ -94,6 +94,7 @@ else
     readonly PaginationState _pagination = new() { ItemsPerPage = 10 };
     private string _nameSearch = string.Empty;
     private string _categorySearch = string.Empty;
+
     private string GeneralSearch
     {
         get => _nameSearch;
@@ -103,6 +104,7 @@ else
             _categorySearch = value;
         }
     }
+
     private DateTime? _startDate = DateTime.MinValue;
     private DateTime? _endDate = DateTime.MaxValue;
     private List<ProductResponse> _allProducts = new();
@@ -136,7 +138,7 @@ else
 
     private async Task<List<ProductResponse>> LoadProducts()
     {
-        return await ProductService.GetAllProducts();
+        return await ProductService.GetAllProductsAsync();
     }
 
     private void Edit(object productId)
