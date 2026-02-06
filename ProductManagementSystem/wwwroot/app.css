@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
     background-color: #ECECEC;
 }
 
@@ -59,6 +61,27 @@ h1:focus {
 /*Removes empty table rows*/
 .table tbody tr:not([aria-rowindex]) {
     display: none;
+}
+
+.in-stock {
+    font-size: .9rem;
+    border-radius: 1rem;
+    background-color: #333;
+    color: #fff;
+}
+
+.low-stock {
+    font-size: .9rem;
+    border-radius: 1rem;
+    background-color: #f9e02d;
+    color: #000;
+}
+
+.out-of-stock {
+    font-size: .9rem;
+    border-radius: 1rem;
+    background-color: #D3494E;
+    color: #fff;
 }
 
 .valid.modified:not([type=checkbox]) {

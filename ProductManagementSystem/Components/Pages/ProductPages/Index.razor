@@ -14,40 +14,34 @@
 else
 {
     <div class="container-fluid">
-        <div class="row align-items-center justify-content-between g-2 mb-3">
-            <div class="col-md-3">
-                <ProductCard Title="Total Items" IconClass="bi bi-box-seam" Count=@_totalItems
-                             ShortDescription="Across all locations"/>
-            </div>
-            <div class="col-md-3">
-                <ProductCard Title="Low Stock Items" IconClass="bi bi-exclamation-triangle" Count=@_totalLowStockItems
-                             ShortDescription="Require restocking"/>
-            </div>
-            <div class="col-md-3">
-                <ProductCard Title="Total Value" IconClass="bi bi-graph-up-arrow" Count=@($"${_totalPrice}")
-                             ShortDescription="Current inventory value"/>
-            </div>
-            <div class="col-md-3">
-                <ProductCard Title="Categories" IconClass="bi bi-tags" Count=@_categoryCount
-                             ShortDescription="Product categories"/>
-            </div>
-        </div>
+        <AuthorizeView>
+            @if (context.User.IsInRole("Admin") || context.User.IsInRole("Manager"))
+            {
+                <div class="row align-items-center justify-content-between g-2 mb-3">
+                    <div class="col-md-3">
+                        <ProductCard Title="Total Items" IconClass="bi bi-box-seam" Count=@_totalItems
+                                     ShortDescription="Across all locations"/>
+                    </div>
+                    <div class="col-md-3">
+                        <ProductCard Title="Low Stock Items" IconClass="bi bi-exclamation-triangle"
+                                     Count=@_totalLowStockItems
+                                     ShortDescription="Require restocking"/>
+                    </div>
+                    <div class="col-md-3">
+                        <ProductCard Title="Total Value" IconClass="bi bi-graph-up-arrow" Count=@($"${_totalPrice}")
+                                     ShortDescription="Current inventory value"/>
+                    </div>
+                    <div class="col-md-3">
+                        <ProductCard Title="Categories" IconClass="bi bi-tags" Count=@_categoryCount
+                                     ShortDescription="Product categories"/>
+                    </div>
+                </div>
+            }
+        </AuthorizeView>
 
-        <div class="row align-items-center justify-content-between g-2 mb-3">
-            <div class="col-5 search-box">
-                <label>Search</label>
-                <input class="form-control" type="search" @bind="GeneralSearch" @bind:event="oninput"
-                       placeholder="Search by name or category.."/>
-            </div>
-            <div class="col-auto search-box">
-                <label>Start Date</label>
-                <input class="form-control" type="datetime-local" @bind="_startDate" @bind:event="oninput"
-                       placeholder="Start"/>
-            </div>
-            <div class="col-auto search-box">
-                <label>End Date</label>
-                <input class="form-control" type="datetime-local" @bind="_endDate" @bind:event="oninput"
-                       placeholder="End"/>
+        <div class="row align-items-center justify-content-end g-2 mb-3">
+            <div class="col-auto">
+                <button class="btn btn-outline-info" @onclick=ShowContent><i class="bi bi-filter"></i></button>
             </div>
             <div class="col-auto page-size-chooser d-flex align-items-center">
                 <label class="me-2 mb-0">Items per page:</label>
@@ -63,7 +57,55 @@ else
             </div>
         </div>
 
-        <QuickGrid Items="AllProducts" ItemKey="p => p.Id" Pagination="@_pagination" Theme="none"
+        @if (_showContent)
+        {
+            <div class="row align-items-center justify-content-between g-2 mb-3">
+                <div class="col-3 search-box">
+                    <label>Search by Name</label>
+                    <input class="form-control" type="search" autofocus @bind="_nameSearch"
+                           @bind:event="oninput"
+                           @bind:after="OnFilterChanged"
+                           placeholder="Search by name.."/>
+                </div>
+                <div class="col-3 search-box">
+                    <label>Search by Category</label>
+                    <input class="form-control" type="search" autofocus @bind="_categorySearch"
+                           @bind:event="oninput"
+                           @bind:after="OnFilterChanged"
+                           placeholder="Search by category.."/>
+                </div>
+                <div class="col-2 search-box">
+                    <label>Filter by Start Date</label>
+                    <input class="form-control" type="datetime-local" @bind="_startDate" @bind:event="oninput"
+                           @bind:after="OnFilterChanged"
+                           placeholder="Start"/>
+                </div>
+                <div class="col-2 search-box">
+                    <label>Filter by End Date</label>
+                    <input class="form-control" type="datetime-local" @bind="_endDate" @bind:event="oninput"
+                           @bind:after="OnFilterChanged"
+                           placeholder="End"/>
+                </div>
+                <div class="col-1 search-box">
+                    <label>Is Active?</label>
+                    <select class="form-select"
+                            @bind="_isActiveFilterValue"
+                            @bind:after="OnFilterChanged">
+                        <option value="">All</option>
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
+                    </select>
+                </div>
+                <div class="col-1">
+                    <label>Clear Filters</label>
+                    <button type="button" class="btn btn-outline-secondary" @onclick="ClearFilters">
+                        <i class="bi bi-x-circle"></i>
+                    </button>
+                </div>
+            </div>
+        }
+
+        <QuickGrid Items="FilteredProducts" ItemKey="p => p.Id" Pagination="@_pagination" Theme="none"
                    Class="table table-hover">
             <PropertyColumn Property="@(p => p.ProductName)" Title="Product Name" Sortable="true" Align="Align.Center"
                             IsDefaultSortColumn="true"/>
@@ -72,13 +114,21 @@ else
             <PropertyColumn Property="@(p => p.Quantity)" Sortable="true" Align="Align.Center"/>
             <PropertyColumn Property="@(p => p.DateAdded)" Title="Date Added" Format="MM-dd-yyyy hh:mm"
                             Align="Align.Center"/>
+            <TemplateColumn Title="Status" Align="Align.Center">
+                <div class="@(GetStatusClass(context.Status))">
+                    @(context.Status.GetDisplayName() ?? context.Status.ToString())
+                </div>
+            </TemplateColumn>
             <TemplateColumn Title="Is Active?" Align="Align.Center">
                 <input class="form-check-input" type="checkbox" checked="@context.IsActive" disabled/>
             </TemplateColumn>
             <TemplateColumn Title="Actions" Context="product" Align="Align.Center">
-                <button class="btn btn-outline-primary" @onclick="() => Edit(product.Id)"><i
+                <button class="btn btn-outline-primary" @onclick="() => Edit(product.Id)">
+                    <i
                         class="bi bi-pencil-square"></i></button>
-                <button class="btn btn-outline-danger" @onclick="() => Delete(product.Id)"><i class="bi bi-trash3"></i>
+                <button class="btn btn-outline-danger" @onclick="() => Delete(product.Id)">
+                    <i
+                        class="bi bi-trash3"></i>
                 </button>
             </TemplateColumn>
         </QuickGrid>
@@ -90,21 +140,13 @@ else
 
 @code {
     private bool IsLoading { get; set; } = true;
+    private bool _showContent;
+    private bool? _isActiveFilter;
+    private string _isActiveFilterValue = "";
     private QuickGrid<ProductResponse> productGrid;
     readonly PaginationState _pagination = new() { ItemsPerPage = 10 };
     private string _nameSearch = string.Empty;
     private string _categorySearch = string.Empty;
-
-    private string GeneralSearch
-    {
-        get => _nameSearch;
-        set
-        {
-            _nameSearch = value;
-            _categorySearch = value;
-        }
-    }
-
     private DateTime? _startDate = DateTime.MinValue;
     private DateTime? _endDate = DateTime.MaxValue;
     private List<ProductResponse> _allProducts = new();
@@ -113,12 +155,13 @@ else
     private string? _totalPrice;
     private string? _categoryCount;
 
-    private IQueryable<ProductResponse> AllProducts => _allProducts
+    private IQueryable<ProductResponse> FilteredProducts => _allProducts
         .Where(p => (p.ProductName ?? "").Contains(_nameSearch, StringComparison.OrdinalIgnoreCase))
         .Where(p => (p.Category ?? "").Contains(_categorySearch, StringComparison.OrdinalIgnoreCase))
         .Where(p =>
             (!_startDate.HasValue || p.DateAdded >= _startDate.Value) &&
             (!_endDate.HasValue || p.DateAdded <= _endDate.Value))
+        .Where(p => !IsActiveFilter.HasValue || p.IsActive == IsActiveFilter.Value)
         .AsQueryable();
 
     protected override async Task OnInitializedAsync()
@@ -141,14 +184,26 @@ else
         return await ProductService.GetAllProductsAsync();
     }
 
+    private void ShowContent()
+    {
+        _showContent = !_showContent;
+    }
+
+    private string GetStatusClass(StockStatus status)
+    {
+        if (status == StockStatus.OutOfStock)
+            return "out-of-stock";
+        return status == StockStatus.LowStock ? "low-stock" : "in-stock";
+    }
+
+    private async Task OnFilterChanged()
+    {
+        await _pagination.SetCurrentPageIndexAsync(0);
+    }
+
     private void Edit(object productId)
     {
         NavigationManager.NavigateTo($"/products/edit/{productId}");
-    }
-
-    private void Details(object productId)
-    {
-        NavigationManager.NavigateTo($"/products/details/{productId}");
     }
 
     private void Delete(object productId)
@@ -159,6 +214,33 @@ else
     private void Create()
     {
         NavigationManager.NavigateTo("/products/create");
+    }
+
+    private bool? IsActiveFilter => _isActiveFilterValue switch
+    {
+        "true" => true,
+        "false" => false,
+        _ => null
+    };
+
+    private async Task ClearFilters()
+    {
+        _nameSearch = string.Empty;
+        _categorySearch = string.Empty;
+        _isActiveFilterValue = "";
+
+        if (_allProducts.Count > 0)
+        {
+            _startDate = _allProducts.Min(p => p.DateAdded);
+            _endDate = _allProducts.Max(p => p.DateAdded);
+        }
+        else
+        {
+            _startDate = DateTime.MinValue;
+            _endDate = DateTime.MaxValue;
+        }
+
+        await _pagination.SetCurrentPageIndexAsync(0);
     }
 
 }

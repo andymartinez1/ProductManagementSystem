@@ -12,7 +12,7 @@ using ProductManagementSystem.Data;
 namespace ProductManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260202170300_Initial")]
+    [Migration("20260206041712_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -254,7 +254,8 @@ namespace ProductManagementSystem.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Category")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime?>("DateAdded")
                         .HasColumnType("datetime2");
@@ -266,7 +267,8 @@ namespace ProductManagementSystem.Migrations
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("ProductName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
