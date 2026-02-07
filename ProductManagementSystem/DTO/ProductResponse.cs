@@ -9,12 +9,17 @@ public class ProductResponse
     [Display(Name = "Product Name")]
     public string? ProductName { get; set; }
 
+    [Display(Name = "SKU")]
+    public string? Sku { get; set; }
+
     public string? Category { get; set; }
 
     public decimal? Price { get; set; }
 
     [Display(Name = "Date Added")]
     public DateTime? DateAdded { get; set; }
+
+    public string? Location { get; set; }
 
     [Display(Name = "Is Active?")]
     public bool IsActive { get; set; }

@@ -20,14 +20,13 @@
                     </NavLink>
                 </li>
 
-                <li class="nav-item">
-                    <NavLink class="nav-link" href="/products" Match="NavLinkMatch.All">
-                        <i class="bi bi-box-seam-fill"></i> Products
-                    </NavLink>
-                </li>
-
                 <AuthorizeView>
                     <Authorized>
+                        <li class="nav-item">
+                            <NavLink class="nav-link" href="/products" Match="NavLinkMatch.All">
+                                <i class="bi bi-box-seam-fill"></i> Products
+                            </NavLink>
+                        </li>
                         @if (context.User.IsInRole("Admin"))
                         {
                             <li class="nav-item">

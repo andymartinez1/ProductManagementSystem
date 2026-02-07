@@ -5,34 +5,54 @@
 
 <PageTitle>Details</PageTitle>
 
-<h1>Details</h1>
 
-<div>
-    @if (Product is null)
-    {
-        <p><em>Loading...</em></p>
-    }
-    else
-    {
-        <dl class="row">
-            <dt class="col-sm-2">Product Name</dt>
-            <dd class="col-sm-10">@Product.ProductName</dd>
-            <dt class="col-sm-2">Category</dt>
-            <dd class="col-sm-10">@Product.Category</dd>
-            <dt class="col-sm-2">Price</dt>
-            <dd class="col-sm-10">@Product.Price</dd>
-            <dt class="col-sm-2">Quantity</dt>
-            <dd class="col-sm-10">@Product.Quantity</dd>
-            <dt class="col-sm-2">Date Added</dt>
-            <dd class="col-sm-10">@Product.DateAdded</dd>
-            <dt class="col-sm-2">Is Active?</dt>
-            <dd class="col-sm-10">@(Product.IsActive ? "Active" : "Inactive")</dd>
-        </dl>
-        <div>
-            <button class="btn btn-info" @onclick="() => Edit(Product.Id)">Edit</button>
-            <button class="btn btn-secondary" @onclick="Home">Go Back</button>
-        </div>
-    }
+<div class="row">
+    <div class="col-md-4 m-auto">
+        @if (Product is null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            <h1>Product Details</h1>
+            <p class="text-muted">Viewing information for this product.</p>
+
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Name</dt>
+                        <dd class="col-sm-8">@Product.ProductName</dd>
+
+                        <dt class="col-sm-4">SKU</dt>
+                        <dd class="col-sm-8">@Product.Sku</dd>
+
+                        <dt class="col-sm-4">Category</dt>
+                        <dd class="col-sm-8">@Product.Category</dd>
+
+                        <dt class="col-sm-4">Price</dt>
+                        <dd class="col-sm-8">@Product.Price</dd>
+
+                        <dt class="col-sm-4">Quantity</dt>
+                        <dd class="col-sm-8">@Product.Quantity</dd>
+
+                        <dt class="col-sm-4">Date Added</dt>
+                        <dd class="col-sm-8">@Product.DateAdded</dd>
+
+                        <dt class="col-sm-4">Location</dt>
+                        <dd class="col-sm-8">@Product.Location</dd>
+
+                        <dt class="col-sm-4">Is Active?</dt>
+                        <dd class="col-sm-8">@(Product.IsActive ? "Yes" : "No")</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" class="btn btn-outline-primary" @onclick="() => Edit(Product.Id)">Edit</button>
+                <button type="button" class="btn btn-secondary ms-2" @onclick="Home">Cancel</button>
+            </div>
+        }
+    </div>
 </div>
 
 @code {

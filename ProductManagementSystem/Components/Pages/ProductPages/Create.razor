@@ -5,10 +5,10 @@
 
 <PageTitle>Create</PageTitle>
 
-<h1>Add Product</h1>
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 m-auto">
+        <h1>Add Product</h1>
         <EditForm Model="ProductAddRequest" OnValidSubmit="AddProduct">
             <DataAnnotationsValidator/>
             <ValidationSummary role="alert"/>
@@ -17,6 +17,12 @@
                 <label for="productName" class="form-label">Name:</label>
                 <InputText id="productName" @bind-Value="ProductAddRequest.ProductName" class="form-control"/>
                 <ValidationMessage For="() => ProductAddRequest.ProductName" class="text-danger"/>
+            </div>
+
+            <div class="mb-3">
+                <label for="productSku" class="form-label">SKU:</label>
+                <InputText id="productSku" @bind-Value="ProductAddRequest.Sku" class="form-control"/>
+                <ValidationMessage For="() => ProductAddRequest.Sku" class="text-danger"/>
             </div>
 
             <div class="mb-3">
@@ -35,6 +41,12 @@
                 <label for="quantity" class="form-label">Quantity:</label>
                 <InputNumber id="quantity" @bind-Value="ProductAddRequest.Quantity" class="form-control"/>
                 <ValidationMessage For="() => ProductAddRequest.Quantity" class="text-danger"/>
+            </div>
+
+            <div class="mb-3">
+                <label for="productLocation" class="form-label">Location:</label>
+                <InputText id="productLocation" @bind-Value="ProductAddRequest.Location" class="form-control"/>
+                <ValidationMessage For="() => ProductAddRequest.Location" class="text-danger"/>
             </div>
 
             <div class="mb-3">

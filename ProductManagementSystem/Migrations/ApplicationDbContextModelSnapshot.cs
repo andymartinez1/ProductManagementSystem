@@ -260,6 +260,10 @@ namespace ProductManagementSystem.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Location")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
                     b.Property<decimal?>("Price")
                         .HasColumnType("decimal(18, 2)");
 
@@ -269,6 +273,10 @@ namespace ProductManagementSystem.Migrations
 
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<string>("Sku")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("Id");
 
