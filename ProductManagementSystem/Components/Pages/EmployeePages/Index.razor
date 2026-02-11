@@ -5,7 +5,7 @@
 
 @inject UserManager<ApplicationUser> UserManager
 
-<h3>Employees</h3>
+<h1>Employees</h1>
 
 @if (Users is null)
 {
@@ -13,8 +13,11 @@
 }
 else
 {
-    <p>Total users: @Users.Count</p>
-
+    <div class="row align-items-center g-2 mb-3">
+        <div class="col-3">
+            <button class="btn btn-outline-secondary" @onclick="Create">Add Employee</button>
+        </div>
+    </div>
     <div class="container-fluid">
         <QuickGrid Items="AllUsers" ItemKey="u => u.Id" Pagination="@_pagination" Theme="none"
                    Class="table table-hover">
@@ -61,6 +64,11 @@ else
         return _rolesByUserId.TryGetValue(userId, out var roles) && roles.Count > 0
             ? string.Join(", ", roles)
             : "(none)";
+    }
+
+    private void Create()
+    {
+        NavigationManager.NavigateTo("/employees/create");
     }
 
     private void Edit(object userId)

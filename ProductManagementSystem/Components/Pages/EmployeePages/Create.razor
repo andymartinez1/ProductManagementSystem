@@ -1,0 +1,52 @@
+﻿@page "/employees/create"
+@inject UserManager<ApplicationUser> UserManager
+
+<PageTitle>Create</PageTitle>
+
+<div class="row">
+    <div class="col-md-4 m-auto">
+        <h1>Add Employee</h1>
+        <EditForm Model="@_addRequest" FormName="addEmployee"
+                  OnValidSubmit="@(() => HandleValidSubmit(_addRequest.Email, _addRequest.Password))">
+            <DataAnnotationsValidator/>
+            <ValidationSummary role="alert"/>
+
+            <div>
+                <label for="username">Username:</label>
+                <InputText id="username" @bind-Value="_addRequest.UserName" class="form-control"/>
+                <ValidationMessage For="() => _addRequest.UserName"></ValidationMessage>
+            </div>
+
+            <div>
+                <label for="email">Email:</label>
+                <InputText id="email" @bind-Value="_addRequest.Email" class="form-control"/>
+                <ValidationMessage For="() => _addRequest.Email"></ValidationMessage>
+            </div>
+
+            <div>
+                <label for="password">Password:</label>
+                <InputText id="password" @bind-Value="_addRequest.Password" type="password" class="form-control"/>
+                <ValidationMessage For="() => _addRequest.Password"></ValidationMessage>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add User</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private readonly UserAddRequest _addRequest = new();
+    private string message = string.Empty;
+
+    private async Task HandleValidSubmit(string email, string password)
+    {
+        var user = new ApplicationUser { UserName = email, Email = email, EmailConfirmed = true };
+        var result = await UserManager.CreateAsync(user, password);
+
+        if (result.Succeeded)
+        {
+            await UserManager.AddToRoleAsync(user, "Employee");
+        }
+    }
+
+}
