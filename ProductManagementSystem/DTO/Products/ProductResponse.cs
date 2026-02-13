@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ProductManagementSystem.DTO;
+namespace ProductManagementSystem.DTO.Products;
 
 public class ProductResponse
 {

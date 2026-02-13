@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductManagementSystem.Data;
-using ProductManagementSystem.DTO;
 using ProductManagementSystem.DTO.Extensions;
+using ProductManagementSystem.DTO.Products;
 
-namespace ProductManagementSystem.Services;
+namespace ProductManagementSystem.Services.Products;
 
 public class ProductService : IProductService
 {

@@ -1,7 +1,73 @@
-﻿@page "/employees/delete/{UserId:int}"
+﻿@page "/employees/delete/{UserId}"
+@inject UserManager<ApplicationUser> UserManager
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
 
-<h3>Delete</h3>
+<PageTitle>Delete Employee</PageTitle>
+
+<h3>Delete Employee</h3>
+
+@if (user is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="alert alert-warning">
+        <p>Are you sure you want to delete this user?</p>
+    </div>
+
+    <dl class="row">
+        <dt class="col-sm-3">Username</dt>
+        <dd class="col-sm-9">@user.UserName</dd>
+
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9">@user.Email</dd>
+    </dl>
+
+    <form method="post" @formname="delete-user" @onsubmit="DeleteUser">
+        <AntiforgeryToken/>
+        <button type="submit" class="btn btn-danger" disabled="@isDeleting">
+            @(isDeleting ? "Deleting..." : "Delete")
+        </button>
+        <a href="/employees" class="btn btn-secondary">Cancel</a>
+    </form>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <p class="text-danger mt-2">@errorMessage</p>
+    }
+}
 
 @code {
-    [Parameter] public int UserId { get; set; }
+    [Parameter] public string UserId { get; set; } = default!;
+
+    private ApplicationUser? user;
+    private bool isDeleting;
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await UserManager.FindByIdAsync(UserId);
+    }
+
+    private async Task DeleteUser()
+    {
+        if (user is null) return;
+
+        isDeleting = true;
+
+        var result = await UserManager.DeleteAsync(user);
+
+        if (result.Succeeded)
+        {
+            Navigation.NavigateTo("/employees?deleted=1");
+        }
+        else
+        {
+            errorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
+            isDeleting = false;
+        }
+    }
+
 }

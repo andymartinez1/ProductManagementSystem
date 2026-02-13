@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using ProductManagementSystem.Models;
 
-namespace ProductManagementSystem.DTO;
+namespace ProductManagementSystem.DTO.Products;
 
 public class ProductAddRequest
 {

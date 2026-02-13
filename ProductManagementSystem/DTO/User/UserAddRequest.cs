@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ProductManagementSystem.DTO;
+namespace ProductManagementSystem.DTO.User;
 
 public class UserAddRequest
 {
@@ -17,5 +17,10 @@ public class UserAddRequest
         MinimumLength = 8,
         ErrorMessage = "{0} must be between {1} and {2} characters long."
     )]
+    [DataType(DataType.Password)]
     public string Password { get; set; }
+
+    [DataType(DataType.Password)]
+    [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+    public string ConfirmPassword { get; set; }
 }

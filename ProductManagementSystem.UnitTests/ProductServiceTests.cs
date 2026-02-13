@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
-using ProductManagementSystem.DTO;
-using ProductManagementSystem.Services;
+using ProductManagementSystem.DTO.Products;
+using ProductManagementSystem.Services.Products;
 using ProductManagementSystem.UnitTests.TestHelpers;
 
 namespace ProductManagementSystem.UnitTests;
@@ -36,7 +36,7 @@ public class ProductServiceTests
         // Arrange
         await using var context = await DbContextTestExtensions.ConfigureDbContext();
         var sut = new ProductService(context, _loggerMock.Object);
-        ProductAddRequest? product = new ProductAddRequest()
+        var product = new ProductAddRequest
         {
             ProductName = "Test Product",
             Category = "Test Category",

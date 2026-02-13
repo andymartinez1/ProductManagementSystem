@@ -1,6 +1,6 @@
-﻿using ProductManagementSystem.DTO;
+﻿using ProductManagementSystem.DTO.Products;
 
-namespace ProductManagementSystem.Services;
+namespace ProductManagementSystem.Services.Products;
 
 public interface IProductService
 {

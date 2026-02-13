@@ -1,4 +1,6 @@
 @page "/products/details/{ProductId:int}"
+@using ProductManagementSystem.DTO.Products
+@using ProductManagementSystem.Services.Products
 @inject IProductService ProductService
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer

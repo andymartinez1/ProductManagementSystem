@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using ProductManagementSystem.Components;
 using ProductManagementSystem.Components.Account;
 using ProductManagementSystem.Data;
-using ProductManagementSystem.Services;
+using ProductManagementSystem.Services.Email;
+using ProductManagementSystem.Services.Products;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +52,8 @@ builder
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddBlazorBootstrap();
 
 var app = builder.Build();
 

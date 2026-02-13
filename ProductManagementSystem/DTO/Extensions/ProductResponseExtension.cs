@@ -1,4 +1,5 @@
-﻿using ProductManagementSystem.Models;
+﻿using ProductManagementSystem.DTO.Products;
+using ProductManagementSystem.Models;
 
 namespace ProductManagementSystem.DTO.Extensions;
 
