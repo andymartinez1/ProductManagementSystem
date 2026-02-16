@@ -22,28 +22,27 @@ else
                 <Button Color="ButtonColor.Secondary" Outline="true" @onclick="Create">Add Employee</Button>
             </div>
         </div>
-        <div class="container-fluid">
-            <QuickGrid Items="AllUsers" ItemKey="u => u.Id" Pagination="@_pagination" Theme="none"
-                       Class="table table-hover">
-                <PropertyColumn Property="u => u.UserName" Align="Align.Center" Title="Username"/>
-                <TemplateColumn Title="Role" Context="u" Align="Align.Center">
-                    @GetRolesText(u.Id)
-                </TemplateColumn>
-                <PropertyColumn Property="u => u.Email" Align="Align.Center"/>
-                <TemplateColumn Align="Align.Center" Title="Email Confirmed?">
-                    <input class="form-check-input" type="checkbox" checked="@context.EmailConfirmed" disabled/>
-                </TemplateColumn>
-                <TemplateColumn Title="Actions" Context="u" Align="Align.Center">
-                    <button class="btn btn-outline-primary" @onclick="() => Edit(u.Id)"><i
-                            class="bi bi-pencil-square"></i>
-                    </button>
-                    <button class="btn btn-outline-danger" @onclick="() => Delete(u.Id)"><i class="bi bi-trash3"></i>
-                    </button>
-                </TemplateColumn>
-            </QuickGrid>
-        </div>
 
+        <QuickGrid Items="AllUsers" ItemKey="u => u.Id" Pagination="@_pagination" Theme="none"
+                   Class="table table-hover">
+            <PropertyColumn Property="u => u.UserName" Align="Align.Center" Title="Username"/>
+            <TemplateColumn Title="Role" Context="u" Align="Align.Center">
+                @GetRolesText(u.Id)
+            </TemplateColumn>
+            <PropertyColumn Property="u => u.Email" Align="Align.Center"/>
+            <TemplateColumn Align="Align.Center" Title="Email Confirmed?">
+                <input class="form-check-input" type="checkbox" checked="@context.EmailConfirmed" disabled/>
+            </TemplateColumn>
+            <TemplateColumn Title="Actions" Context="u" Align="Align.Center">
+                <button class="btn btn-outline-primary" @onclick="() => Edit(u.Id)"><i
+                        class="bi bi-pencil-square"></i>
+                </button>
+                <button class="btn btn-outline-danger" @onclick="() => Delete(u.Id)"><i class="bi bi-trash3"></i>
+                </button>
+            </TemplateColumn>
+        </QuickGrid>
     </div>
+
     <div>
         <Paginator State="_pagination"/>
     </div>
