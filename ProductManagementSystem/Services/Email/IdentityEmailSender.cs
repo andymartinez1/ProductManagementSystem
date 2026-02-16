@@ -25,11 +25,11 @@ public class IdentityEmailSender : IEmailSender<ApplicationUser>
                 To = email,
                 Subject = "Confirm your email",
                 Body = $"""
-                <p>Hello,</p>
-                <p>Please confirm your account by clicking this link:</p>
-                <p><a href="{confirmationLink}">Confirm email</a></p>
-                <p>If you didn’t request this, you can ignore this email.</p>
-                """,
+                        <p>Hello,</p>
+                        <p>Please confirm your account by clicking this link:</p>
+                        <p><a href="{confirmationLink}">Confirm email</a></p>
+                        <p>If you didn’t request this, you can ignore this email.</p>
+                        """
             }
         );
     }
@@ -42,11 +42,11 @@ public class IdentityEmailSender : IEmailSender<ApplicationUser>
                 To = email,
                 Subject = "Reset your password",
                 Body = $"""
-                <p>Hello,</p>
-                <p>You can reset your password by clicking this link:</p>
-                <p><a href="{resetLink}">Reset password</a></p>
-                <p>If you didn’t request this, you can ignore this email.</p>
-                """,
+                        <p>Hello,</p>
+                        <p>You can reset your password by clicking this link:</p>
+                        <p><a href="{resetLink}">Reset password</a></p>
+                        <p>If you didn’t request this, you can ignore this email.</p>
+                        """
             }
         );
     }
@@ -59,9 +59,9 @@ public class IdentityEmailSender : IEmailSender<ApplicationUser>
                 To = email,
                 Subject = "Your password reset code",
                 Body = $"""
-                <p>Your password reset code is:</p>
-                <p><strong>{resetCode}</strong></p>
-                """,
+                        <p>Your password reset code is:</p>
+                        <p><strong>{resetCode}</strong></p>
+                        """
             }
         );
     }

@@ -6,8 +6,21 @@ using ProductManagementSystem.Components.Account;
 using ProductManagementSystem.Data;
 using ProductManagementSystem.Services.Email;
 using ProductManagementSystem.Services.Products;
+using Serilog;
+using Serilog.Sinks.MSSqlServer;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .Enrich.FromLogContext()
+    .WriteTo.MSSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        new MSSqlServerSinkOptions { TableName = "Logs", AutoCreateSqlTable = true }
+    )
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddRazorPages();

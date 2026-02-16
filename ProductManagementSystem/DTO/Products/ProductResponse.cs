@@ -6,23 +6,19 @@ public class ProductResponse
 {
     public int Id { get; set; }
 
-    [Display(Name = "Product Name")]
-    public string? ProductName { get; set; }
+    [Display(Name = "Product Name")] public string? ProductName { get; set; }
 
-    [Display(Name = "SKU")]
-    public string? Sku { get; set; }
+    [Display(Name = "SKU")] public string? Sku { get; set; }
 
     public string? Category { get; set; }
 
     public decimal? Price { get; set; }
 
-    [Display(Name = "Date Added")]
-    public DateTime? DateAdded { get; set; }
+    [Display(Name = "Date Added")] public DateTime? DateAdded { get; set; }
 
     public string? Location { get; set; }
 
-    [Display(Name = "Is Active?")]
-    public bool IsActive { get; set; }
+    [Display(Name = "Is Active?")] public bool IsActive { get; set; }
 
     public int? Quantity { get; set; }
 
@@ -41,12 +37,9 @@ public class ProductResponse
 
 public enum StockStatus
 {
-    [Display(Name = "In Stock")]
-    InStock,
+    [Display(Name = "In Stock")] InStock,
 
-    [Display(Name = "Low Stock")]
-    LowStock,
+    [Display(Name = "Low Stock")] LowStock,
 
-    [Display(Name = "Out of Stock")]
-    OutOfStock,
+    [Display(Name = "Out of Stock")] OutOfStock
 }

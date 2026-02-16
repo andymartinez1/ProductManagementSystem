@@ -36,7 +36,7 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
                 IEnumerable<KeyValuePair<string, StringValues>> query =
                 [
                     new("ReturnUrl", returnUrl),
-                    new("Action", ExternalLogin.LoginCallbackAction),
+                    new("Action", ExternalLogin.LoginCallbackAction)
                 ];
 
                 var redirectUrl = UriHelper.BuildRelative(
@@ -90,7 +90,7 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
                     {
                         Id = userId,
                         Name = userName,
-                        DisplayName = userName,
+                        DisplayName = userName
                     }
                 );
                 return TypedResults.Content(optionsJson, "application/json");

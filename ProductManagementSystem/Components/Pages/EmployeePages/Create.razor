@@ -8,8 +8,6 @@
 
 <PageTitle>Add Employee</PageTitle>
 
-<h3>Add Employee</h3>
-
 <div class="row">
     <div class="col-md-4 m-auto">
         <h1>Add Employee</h1>
@@ -38,14 +36,14 @@
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-start mt-2">
                 <Button Color="ButtonColor.Secondary" @onclick="Cancel">Cancel</Button>
-                <Button Type="ButtonType.Submit" Color="ButtonColor.Primary">Add User</Button>
+                <Button Type="ButtonType.Submit" Color="ButtonColor.Primary">Add Employee</Button>
             </div>
         </EditForm>
     </div>
 </div>
 
 @code {
-    private UserAddRequest _addRequest = new();
+    private readonly UserAddRequest _addRequest = new();
     private EditContext _editContext = default!;
     private ValidationMessageStore _validationMessages = default!;
 

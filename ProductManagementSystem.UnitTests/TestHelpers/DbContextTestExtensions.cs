@@ -24,7 +24,7 @@ public static class DbContextTestExtensions
                 Price = 12.99m,
                 Quantity = 10,
                 DateAdded = DateTime.Now,
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -34,7 +34,7 @@ public static class DbContextTestExtensions
                 Price = 8.49m,
                 Quantity = 25,
                 DateAdded = DateTime.Now.AddHours(-12),
-                IsActive = true,
+                IsActive = true
             },
             new()
             {
@@ -44,8 +44,8 @@ public static class DbContextTestExtensions
                 Price = 199.99m,
                 Quantity = 5,
                 DateAdded = DateTime.Now.AddHours(-18),
-                IsActive = false,
-            },
+                IsActive = false
+            }
         };
         await context.AddRangeAsync(mockProductList);
         await context.SaveChangesAsync();

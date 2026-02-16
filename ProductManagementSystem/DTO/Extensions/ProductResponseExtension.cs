@@ -17,7 +17,7 @@ public static class ProductResponseExtension
             DateAdded = product.DateAdded,
             Location = product.Location,
             IsActive = product.IsActive,
-            Quantity = product.Quantity,
+            Quantity = product.Quantity
         };
     }
 }

@@ -4,7 +4,7 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<PageTitle>Delete</PageTitle>
+<PageTitle>Delete Product</PageTitle>
 
 <div class="row">
     <div class="col-md-4 m-auto">
@@ -48,8 +48,10 @@
             </div>
 
             <EditForm method="post" Model="ProductResponse" OnValidSubmit="DeleteProduct" FormName="delete" Enhance>
-                <button type="submit" class="btn btn-danger" disabled="@(ProductResponse is null)">Delete</button>
-                <button type="button" class="btn btn-secondary ms-2" @onclick="Home">Cancel</button>
+                <Button Color="ButtonColor.Secondary" @onclick="Home">Cancel</Button>
+                <Button Type="ButtonType.Submit" Color="ButtonColor.Danger" Disabled="@(ProductResponse is null)">
+                    Delete
+                </Button>
             </EditForm>
         }
     </div>

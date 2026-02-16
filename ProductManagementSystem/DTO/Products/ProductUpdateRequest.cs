@@ -30,8 +30,7 @@ public class ProductUpdateRequest
     )]
     public string? Category { get; set; }
 
-    [Column(TypeName = "decimal(18, 2)")]
-    public decimal? Price { get; set; }
+    [Column(TypeName = "decimal(18, 2)")] public decimal? Price { get; set; }
 
     public DateTime? DateAdded { get; set; }
 
@@ -57,7 +56,7 @@ public class ProductUpdateRequest
             DateAdded = DateAdded,
             Location = Location,
             IsActive = IsActive,
-            Quantity = Quantity,
+            Quantity = Quantity
         };
     }
 }

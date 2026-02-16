@@ -4,7 +4,7 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<PageTitle>Create</PageTitle>
+<PageTitle>Add Product</PageTitle>
 
 
 <div class="row">
@@ -56,8 +56,8 @@
                 <ValidationMessage For="() => ProductAddRequest.IsActive" class="text-danger"/>
             </div>
 
-            <button type="submit" class="btn btn-primary">Add</button>
-            <button type="button" class="btn btn-secondary" @onclick="Home">Cancel</button>
+            <Button Color="ButtonColor.Secondary" @onclick="Home">Cancel</Button>
+            <Button Type="ButtonType.Submit" Color="ButtonColor.Primary">Add</Button>
         </EditForm>
     </div>
 </div>

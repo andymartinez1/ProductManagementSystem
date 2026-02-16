@@ -1,40 +1,45 @@
 ﻿@page "/employees/delete/{UserId}"
 @inject UserManager<ApplicationUser> UserManager
-@inject NavigationManager Navigation
+@inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
 <PageTitle>Delete Employee</PageTitle>
 
-<h3>Delete Employee</h3>
+<div class="row">
+    <div class="col-md-4 m-auto">
+        @if (_user is null)
+        {
+            <p>Loading...</p>
+        }
+        else
+        {
+            <h1>Delete Employee</h1>
+            <p text-muted>Are you sure you want to delete this user?</p>
 
-@if (_user is null)
-{
-    <p>Loading...</p>
-}
-else
-{
-    <div class="alert alert-warning">
-        <p>Are you sure you want to delete this user?</p>
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-3">Email</dt>
+                        <dd class="col-sm-9">@_user.Email</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <form method="post" @formname="deleteEmployee" @onsubmit="DeleteUser">
+                <Button Color="ButtonColor.Secondary" @onclick="Home">Cancel</Button>
+                <AntiforgeryToken/>
+                <Button Type="ButtonType.Submit" Color="ButtonColor.Danger" disabled="@_isDeleting">
+                    @(_isDeleting ? "Deleting..." : "Delete")
+                </Button>
+            </form>
+
+            @if (!string.IsNullOrEmpty(_errorMessage))
+            {
+                <p class="text-danger mt-2">@_errorMessage</p>
+            }
+        }
     </div>
-
-    <dl class="row">
-        <dt class="col-sm-3">Email</dt>
-        <dd class="col-sm-9">@_user.Email</dd>
-    </dl>
-
-    <form method="post" @formname="deleteEmployee" @onsubmit="DeleteUser">
-        <AntiforgeryToken/>
-        <button type="submit" class="btn btn-danger" disabled="@_isDeleting">
-            @(_isDeleting ? "Deleting..." : "Delete")
-        </button>
-        <a href="/employees" class="btn btn-secondary">Cancel</a>
-    </form>
-
-    @if (!string.IsNullOrEmpty(_errorMessage))
-    {
-        <p class="text-danger mt-2">@_errorMessage</p>
-    }
-}
+</div>
 
 @code {
     [Parameter] public string UserId { get; set; } = default!;
@@ -58,13 +63,18 @@ else
 
         if (result.Succeeded)
         {
-            Navigation.NavigateTo("/employees?deleted=1");
+            NavigationManager.NavigateTo("/employees?deleted=1");
         }
         else
         {
             _errorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
             _isDeleting = false;
         }
+    }
+
+    private void Home()
+    {
+        NavigationManager.NavigateTo("/employees");
     }
 
 }
