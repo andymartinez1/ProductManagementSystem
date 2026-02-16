@@ -1,23 +1,21 @@
 ﻿@page "/employees/create"
+@using System.Text
+@using Microsoft.AspNetCore.WebUtilities
 @inject UserManager<ApplicationUser> UserManager
-@inject NavigationManager Navigation
+@inject NavigationManager NavigationManager
+@inject IEmailSender<ApplicationUser> EmailSender
 @rendermode InteractiveServer
 
-<PageTitle>Create</PageTitle>
+<PageTitle>Add Employee</PageTitle>
+
+<h3>Add Employee</h3>
 
 <div class="row">
     <div class="col-md-4 m-auto">
         <h1>Add Employee</h1>
-        <EditForm Model="@_addRequest" FormName="addEmployee"
-                  OnValidSubmit="HandleValidSubmit"
-                  OnInvalidSubmit="HandleInvalidSubmit">
+        <EditForm EditContext="_editContext" FormName="addEmployee"
+                  OnValidSubmit="HandleValidSubmit">
             <DataAnnotationsValidator/>
-
-            <div>
-                <label for="username">Username:</label>
-                <InputText id="username" @bind-Value="_addRequest.UserName" class="form-control"/>
-                <ValidationMessage For="() => _addRequest.UserName"></ValidationMessage>
-            </div>
 
             <div>
                 <label for="email">Email:</label>
@@ -38,44 +36,66 @@
                 <ValidationMessage For="() => _addRequest.ConfirmPassword"></ValidationMessage>
             </div>
 
-            <button type="submit" class="btn btn-primary mt-3">Add User</button>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start mt-2">
+                <Button Color="ButtonColor.Secondary" @onclick="Cancel">Cancel</Button>
+                <Button Type="ButtonType.Submit" Color="ButtonColor.Primary">Add User</Button>
+            </div>
         </EditForm>
     </div>
 </div>
 
 @code {
-    private readonly UserAddRequest _addRequest = new();
-    readonly List<ToastMessage> messages = [];
+    private UserAddRequest _addRequest = new();
+    private EditContext _editContext = default!;
+    private ValidationMessageStore _validationMessages = default!;
+
+    protected override void OnInitialized()
+    {
+        _editContext = new EditContext(_addRequest);
+        _validationMessages = new ValidationMessageStore(_editContext);
+        _editContext.OnValidationRequested += (_, _) => _validationMessages.Clear();
+    }
 
     private async Task HandleValidSubmit()
     {
-        var user = new ApplicationUser { UserName = _addRequest.UserName, Email = _addRequest.Email, EmailConfirmed = false };
+        var existingUser = await UserManager.FindByEmailAsync(_addRequest.Email);
+        if (existingUser is not null)
+        {
+            _validationMessages.Add(() => _addRequest.Email, "An account with this email already exists.");
+            _editContext.NotifyValidationStateChanged();
+            return;
+        }
+
+        var user = new ApplicationUser { UserName = _addRequest.Email, Email = _addRequest.Email, EmailConfirmed = false };
 
         var result = await UserManager.CreateAsync(user, _addRequest.Password);
 
         if (result.Succeeded)
         {
             await UserManager.AddToRoleAsync(user, "Employee");
-            
-            Navigation.NavigateTo("/employees?created=1");
-        }
-        else
-        {
-            messages.Add(
-                new ToastMessage
-                {
-                    Type = ToastType.Danger, Message = $"User could not be added. DateTime: {DateTime.Now}"
-                });
+
+            // Generate confirmation link
+            var token = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+            var code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+            // Default Identity endpoint (available because you call MapAdditionalIdentityEndpoints())
+            var confirmUrl = QueryHelpers.AddQueryString(
+                $"{NavigationManager.BaseUri.TrimEnd('/')}/Account/ConfirmEmail",
+                "userId",
+                user.Id
+            );
+            confirmUrl = QueryHelpers.AddQueryString(confirmUrl, "code", code);
+
+            // Send email via Identity (which uses your IdentityEmailSender -> IEmailService -> SMTP)
+            await EmailSender.SendConfirmationLinkAsync(user, user.Email!, confirmUrl);
+
+            NavigationManager.NavigateTo("/employees?created=1");
         }
     }
 
-    private void HandleInvalidSubmit()
+    private void Cancel()
     {
-        messages.Add(
-            new ToastMessage
-            {
-                Type = ToastType.Danger, Message = $"User could not be added. DateTime: {DateTime.Now}"
-            });
+        NavigationManager.NavigateTo("/employees");
     }
 
 }

@@ -5,7 +5,9 @@
 @inject RoleManager<IdentityRole> RoleManager
 @inject NavigationManager NavigationManager
 
-<h3>Edit User</h3>
+<PageTitle>Update Employee</PageTitle>
+
+<h3>Update Employee</h3>
 
 @if (!string.IsNullOrEmpty(_errorMessage))
 {
@@ -27,7 +29,7 @@ else
         <div><strong>Current role(s):</strong> @string.Join(", ", _currentRoles)</div>
     </div>
 
-    <EditForm Model="@_form" OnValidSubmit="SaveAsync">
+    <EditForm Model="@_form" FormName="updateEmployee" OnValidSubmit="SaveAsync">
         <DataAnnotationsValidator/>
 
         <div class="mb-3">
@@ -121,7 +123,7 @@ else
                     throw new InvalidOperationException(string.Join(", ", addResult.Errors.Select(e => e.Description)));
             }
 
-            NavigationManager.NavigateTo("/employees");
+            NavigationManager.NavigateTo("/employees?updated=1");
         }
         catch (Exception ex)
         {

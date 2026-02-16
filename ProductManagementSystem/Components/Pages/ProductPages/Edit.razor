@@ -1,5 +1,4 @@
 @page "/products/edit/{ProductId:int}"
-@using ProductManagementSystem.DTO.Products
 @using ProductManagementSystem.Services.Products
 @inject NavigationManager NavigationManager
 @inject IProductService ProductService
@@ -118,7 +117,7 @@ else
 
         await ProductService.UpdateProductAsync(ProductUpdateRequest);
 
-        NavigationManager.NavigateTo("/products");
+        NavigationManager.NavigateTo("/products?updated=1");
     }
 
 }

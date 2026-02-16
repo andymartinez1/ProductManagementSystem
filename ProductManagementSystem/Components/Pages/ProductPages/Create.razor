@@ -1,5 +1,4 @@
 @page "/products/create"
-@using ProductManagementSystem.DTO.Products
 @using ProductManagementSystem.Services.Products
 @inject IProductService ProductService
 @inject NavigationManager NavigationManager
@@ -76,7 +75,7 @@
     {
         await ProductService.AddProductAsync(ProductAddRequest);
 
-        NavigationManager.NavigateTo("/products");
+        NavigationManager.NavigateTo("/products?created=1");
     }
 
     private void Home()

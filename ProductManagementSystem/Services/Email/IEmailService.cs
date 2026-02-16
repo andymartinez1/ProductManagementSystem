@@ -1,6 +1,8 @@
-﻿namespace ProductManagementSystem.Services.Email;
+﻿using ProductManagementSystem.DTO.Email;
+
+namespace ProductManagementSystem.Services.Email;
 
 public interface IEmailService
 {
-    void SendEmail();
+    Task SendEmailAsync(EmailRequest request, CancellationToken cancellationToken = default);
 }

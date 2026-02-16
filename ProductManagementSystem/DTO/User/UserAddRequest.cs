@@ -4,7 +4,6 @@ namespace ProductManagementSystem.DTO.User;
 
 public class UserAddRequest
 {
-    [Required(ErrorMessage = "Username is required")]
     public string UserName { get; set; }
 
     [Required(ErrorMessage = "Email is required")]
@@ -20,6 +19,7 @@ public class UserAddRequest
     [DataType(DataType.Password)]
     public string Password { get; set; }
 
+    [Required(ErrorMessage = "Password confirmation is required")]
     [DataType(DataType.Password)]
     [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
     public string ConfirmPassword { get; set; }

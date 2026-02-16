@@ -7,7 +7,7 @@
 
 <h3>Delete Employee</h3>
 
-@if (user is null)
+@if (_user is null)
 {
     <p>Loading...</p>
 }
@@ -18,46 +18,43 @@ else
     </div>
 
     <dl class="row">
-        <dt class="col-sm-3">Username</dt>
-        <dd class="col-sm-9">@user.UserName</dd>
-
         <dt class="col-sm-3">Email</dt>
-        <dd class="col-sm-9">@user.Email</dd>
+        <dd class="col-sm-9">@_user.Email</dd>
     </dl>
 
-    <form method="post" @formname="delete-user" @onsubmit="DeleteUser">
+    <form method="post" @formname="deleteEmployee" @onsubmit="DeleteUser">
         <AntiforgeryToken/>
-        <button type="submit" class="btn btn-danger" disabled="@isDeleting">
-            @(isDeleting ? "Deleting..." : "Delete")
+        <button type="submit" class="btn btn-danger" disabled="@_isDeleting">
+            @(_isDeleting ? "Deleting..." : "Delete")
         </button>
         <a href="/employees" class="btn btn-secondary">Cancel</a>
     </form>
 
-    @if (!string.IsNullOrEmpty(errorMessage))
+    @if (!string.IsNullOrEmpty(_errorMessage))
     {
-        <p class="text-danger mt-2">@errorMessage</p>
+        <p class="text-danger mt-2">@_errorMessage</p>
     }
 }
 
 @code {
     [Parameter] public string UserId { get; set; } = default!;
 
-    private ApplicationUser? user;
-    private bool isDeleting;
-    private string? errorMessage;
+    private ApplicationUser? _user;
+    private bool _isDeleting;
+    private string? _errorMessage;
 
     protected override async Task OnInitializedAsync()
     {
-        user = await UserManager.FindByIdAsync(UserId);
+        _user = await UserManager.FindByIdAsync(UserId);
     }
 
     private async Task DeleteUser()
     {
-        if (user is null) return;
+        if (_user is null) return;
 
-        isDeleting = true;
+        _isDeleting = true;
 
-        var result = await UserManager.DeleteAsync(user);
+        var result = await UserManager.DeleteAsync(_user);
 
         if (result.Succeeded)
         {
@@ -65,8 +62,8 @@ else
         }
         else
         {
-            errorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
-            isDeleting = false;
+            _errorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
+            _isDeleting = false;
         }
     }
 

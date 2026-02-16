@@ -1,5 +1,4 @@
 @page "/products/delete/{ProductId:int}"
-@using ProductManagementSystem.DTO.Products
 @using ProductManagementSystem.Services.Products
 @inject IProductService ProductService
 @inject NavigationManager NavigationManager
@@ -75,7 +74,7 @@
     {
         await ProductService.DeleteProductAsync(ProductId);
 
-        NavigationManager.NavigateTo("/products");
+        NavigationManager.NavigateTo("/products?deleted=1");
     }
 
     private void Home()
