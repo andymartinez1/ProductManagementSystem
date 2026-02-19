@@ -41,7 +41,6 @@
                     <button type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
                 </div>
                 <hr/>
-                <hr/>
                 <div>
                     <p>
                         <a href="Account/ForgotPassword">Forgot your password?</a>
@@ -55,6 +54,55 @@
                     </p>
                 </div>
             </EditForm>
+            <hr>
+            <p class="text-center">Or sign in with:</p>
+            <div class="row align-items-center justify-content-center g-2 mb-3">
+                <div class="col-auto">
+                    <form method="post" action="/Account/PerformExternalLogin">
+                        <AntiforgeryToken/>
+                        <input type="hidden" name="provider" value="Google"/>
+                        <input type="hidden" name="returnUrl" value="/"/>
+                        <Button Size="ButtonSize.ExtraLarge" Type="ButtonType.Submit"><i class="bi bi-google"></i>
+                        </Button>
+                    </form>
+                </div>
+                <div class="col-auto">
+                    <form method="post" action="/Account/PerformExternalLogin">
+                        <AntiforgeryToken/>
+                        <input type="hidden" name="provider" value="Facebook"/>
+                        <input type="hidden" name="returnUrl" value="/"/>
+                        <Button Size="ButtonSize.ExtraLarge" Type="ButtonType.Submit"><i class="bi bi-facebook"></i>
+                        </Button>
+                    </form>
+                </div>
+                <div class="col-auto">
+                    <form method="post" action="/Account/PerformExternalLogin">
+                        <AntiforgeryToken/>
+                        <input type="hidden" name="provider" value="GitHub"/>
+                        <input type="hidden" name="returnUrl" value="@(ReturnUrl ?? "/")"/>
+                        <Button Size="ButtonSize.ExtraLarge" Type="ButtonType.Submit"><i class="bi bi-github"></i>
+                        </Button>
+                    </form>
+                </div>
+                <div class="col-auto">
+                    <form method="post" action="/Account/PerformExternalLogin">
+                        <AntiforgeryToken/>
+                        <input type="hidden" name="provider" value="Microsoft"/>
+                        <input type="hidden" name="returnUrl" value="@(ReturnUrl ?? "/")"/>
+                        <Button Size="ButtonSize.ExtraLarge" Type="ButtonType.Submit"><i class="bi bi-microsoft"></i>
+                        </Button>
+                    </form>
+                </div>
+                <div class="col-auto">
+                    <form method="post" action="/Account/PerformExternalLogin">
+                        <AntiforgeryToken/>
+                        <input type="hidden" name="provider" value="Twitter"/>
+                        <input type="hidden" name="returnUrl" value="@(ReturnUrl ?? "/")"/>
+                        <Button Size="ButtonSize.ExtraLarge" Type="ButtonType.Submit"><i class="bi bi-twitter-x"></i>
+                        </Button>
+                    </form>
+                </div>
+            </div>
         </section>
     </div>
 </div>

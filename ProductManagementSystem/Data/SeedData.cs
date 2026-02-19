@@ -8,6 +8,9 @@ public static class SeedData
 {
     public static async Task InitializeDataAsync(IServiceProvider serviceProvider)
     {
+        var env = serviceProvider.GetRequiredService<IHostEnvironment>();
+        var logger = serviceProvider.GetService<ILoggerFactory>()?.CreateLogger("SeedData");
+
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
         string[] roleNames = { "Admin", "Manager", "Employee" };
@@ -17,7 +20,19 @@ public static class SeedData
         );
 
         // Ensure database exists
-        await context.Database.MigrateAsync();
+        if (env.IsDevelopment())
+        {
+            await context.Database.EnsureCreatedAsync();
+
+            logger?.LogWarning(
+                "Development mode: database was deleted and recreated using EnsureDeleted/EnsureCreated. "
+                    + "This bypasses migrations."
+            );
+        }
+        else
+        {
+            await context.Database.MigrateAsync();
+        }
 
         // Seed Roles
         foreach (var roleName in roleNames)
@@ -35,7 +50,7 @@ public static class SeedData
             {
                 UserName = adminEmail,
                 Email = adminEmail,
-                EmailConfirmed = true
+                EmailConfirmed = true,
             };
 
             var result = await userManager.CreateAsync(adminUser, seedPassword);
@@ -52,7 +67,7 @@ public static class SeedData
             {
                 UserName = employeeEmail,
                 Email = employeeEmail,
-                EmailConfirmed = true
+                EmailConfirmed = true,
             };
 
             var result = await userManager.CreateAsync(employeeUser, seedPassword);
@@ -83,7 +98,7 @@ public static class SeedData
                 Quantity = 150,
                 DateAdded = new DateTime(2025, 6, 1),
                 Location = "A-01",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -94,7 +109,7 @@ public static class SeedData
                 Quantity = 75,
                 DateAdded = new DateTime(2025, 5, 20),
                 Location = "A-02",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -105,7 +120,7 @@ public static class SeedData
                 Quantity = 200,
                 DateAdded = new DateTime(2025, 2, 10),
                 Location = "B-03",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -116,7 +131,7 @@ public static class SeedData
                 Quantity = 500,
                 DateAdded = new DateTime(2024, 11, 15),
                 Location = "C-04",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -127,7 +142,7 @@ public static class SeedData
                 Quantity = 40,
                 DateAdded = new DateTime(2025, 3, 5),
                 Location = "D-05",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -138,7 +153,7 @@ public static class SeedData
                 Quantity = 120,
                 DateAdded = new DateTime(2025, 4, 12),
                 Location = "E-06",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -149,7 +164,7 @@ public static class SeedData
                 Quantity = 80,
                 DateAdded = new DateTime(2025, 1, 18),
                 Location = "F-07",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -160,7 +175,7 @@ public static class SeedData
                 Quantity = 25,
                 DateAdded = new DateTime(2024, 12, 1),
                 Location = "A-08",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -171,7 +186,7 @@ public static class SeedData
                 Quantity = 300,
                 DateAdded = new DateTime(2025, 6, 10),
                 Location = "G-09",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -182,7 +197,7 @@ public static class SeedData
                 Quantity = 60,
                 DateAdded = new DateTime(2024, 9, 30),
                 Location = "H-10",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -193,7 +208,7 @@ public static class SeedData
                 Quantity = 220,
                 DateAdded = new DateTime(2025, 2, 2),
                 Location = "I-11",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -204,7 +219,7 @@ public static class SeedData
                 Quantity = 140,
                 DateAdded = new DateTime(2025, 3, 14),
                 Location = "B-12",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -215,7 +230,7 @@ public static class SeedData
                 Quantity = 360,
                 DateAdded = new DateTime(2024, 10, 5),
                 Location = "J-13",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -226,7 +241,7 @@ public static class SeedData
                 Quantity = 180,
                 DateAdded = new DateTime(2025, 4, 1),
                 Location = "A-14",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -237,7 +252,7 @@ public static class SeedData
                 Quantity = 420,
                 DateAdded = new DateTime(2024, 8, 20),
                 Location = "H-15",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -248,7 +263,7 @@ public static class SeedData
                 Quantity = 95,
                 DateAdded = new DateTime(2025, 1, 7),
                 Location = "K-16",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -259,7 +274,7 @@ public static class SeedData
                 Quantity = 50,
                 DateAdded = new DateTime(2025, 5, 25),
                 Location = "B-17",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -270,7 +285,7 @@ public static class SeedData
                 Quantity = 210,
                 DateAdded = new DateTime(2025, 2, 28),
                 Location = "E-18",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -281,7 +296,7 @@ public static class SeedData
                 Quantity = 30,
                 DateAdded = new DateTime(2025, 3, 30),
                 Location = "L-19",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -292,7 +307,7 @@ public static class SeedData
                 Quantity = 110,
                 DateAdded = new DateTime(2024, 12, 18),
                 Location = "J-20",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -303,7 +318,7 @@ public static class SeedData
                 Quantity = 85,
                 DateAdded = new DateTime(2025, 1, 25),
                 Location = "A-21",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -314,7 +329,7 @@ public static class SeedData
                 Quantity = 130,
                 DateAdded = new DateTime(2024, 11, 2),
                 Location = "A-22",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -325,7 +340,7 @@ public static class SeedData
                 Quantity = 70,
                 DateAdded = new DateTime(2025, 4, 8),
                 Location = "J-23",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -336,7 +351,7 @@ public static class SeedData
                 Quantity = 250,
                 DateAdded = new DateTime(2025, 5, 2),
                 Location = "K-24",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -347,7 +362,7 @@ public static class SeedData
                 Quantity = 60,
                 DateAdded = new DateTime(2024, 9, 12),
                 Location = "M-25",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -358,7 +373,7 @@ public static class SeedData
                 Quantity = 90,
                 DateAdded = new DateTime(2025, 2, 15),
                 Location = "N-26",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -369,7 +384,7 @@ public static class SeedData
                 Quantity = 75,
                 DateAdded = new DateTime(2025, 3, 20),
                 Location = "D-27",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -380,7 +395,7 @@ public static class SeedData
                 Quantity = 48,
                 DateAdded = new DateTime(2024, 12, 6),
                 Location = "J-28",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -391,7 +406,7 @@ public static class SeedData
                 Quantity = 160,
                 DateAdded = new DateTime(2025, 1, 12),
                 Location = "O-29",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -402,7 +417,7 @@ public static class SeedData
                 Quantity = 40,
                 DateAdded = new DateTime(2024, 10, 28),
                 Location = "P-30",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -413,7 +428,7 @@ public static class SeedData
                 Quantity = 55,
                 DateAdded = new DateTime(2025, 6, 5),
                 Location = "A-31",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -424,7 +439,7 @@ public static class SeedData
                 Quantity = 140,
                 DateAdded = new DateTime(2025, 4, 20),
                 Location = "J-32",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -435,7 +450,7 @@ public static class SeedData
                 Quantity = 220,
                 DateAdded = new DateTime(2025, 2, 27),
                 Location = "Q-33",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -446,7 +461,7 @@ public static class SeedData
                 Quantity = 65,
                 DateAdded = new DateTime(2025, 3, 9),
                 Location = "R-34",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -457,7 +472,7 @@ public static class SeedData
                 Quantity = 300,
                 DateAdded = new DateTime(2024, 11, 22),
                 Location = "B-35",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -468,7 +483,7 @@ public static class SeedData
                 Quantity = 95,
                 DateAdded = new DateTime(2025, 5, 18),
                 Location = "S-36",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -479,7 +494,7 @@ public static class SeedData
                 Quantity = 120,
                 DateAdded = new DateTime(2025, 1, 5),
                 Location = "Q-37",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -490,7 +505,7 @@ public static class SeedData
                 Quantity = 180,
                 DateAdded = new DateTime(2024, 9, 5),
                 Location = "F-38",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -501,7 +516,7 @@ public static class SeedData
                 Quantity = 85,
                 DateAdded = new DateTime(2025, 2, 9),
                 Location = "K-39",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -512,7 +527,7 @@ public static class SeedData
                 Quantity = 200,
                 DateAdded = new DateTime(2025, 4, 3),
                 Location = "B-40",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -523,7 +538,7 @@ public static class SeedData
                 Quantity = 3,
                 DateAdded = new DateTime(2024, 7, 15),
                 Location = "A-41",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -534,7 +549,7 @@ public static class SeedData
                 Quantity = 25,
                 DateAdded = new DateTime(2025, 1, 20),
                 Location = "T-42",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -545,7 +560,7 @@ public static class SeedData
                 Quantity = 180,
                 DateAdded = new DateTime(2024, 12, 5),
                 Location = "B-43",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -556,7 +571,7 @@ public static class SeedData
                 Quantity = 5,
                 DateAdded = new DateTime(2024, 8, 18),
                 Location = "H-44",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -567,7 +582,7 @@ public static class SeedData
                 Quantity = 145,
                 DateAdded = new DateTime(2025, 3, 12),
                 Location = "B-45",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -578,7 +593,7 @@ public static class SeedData
                 Quantity = 8,
                 DateAdded = new DateTime(2024, 10, 22),
                 Location = "J-46",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -589,7 +604,7 @@ public static class SeedData
                 Quantity = 95,
                 DateAdded = new DateTime(2025, 4, 7),
                 Location = "D-47",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -600,7 +615,7 @@ public static class SeedData
                 Quantity = 35,
                 DateAdded = new DateTime(2024, 11, 30),
                 Location = "O-48",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -611,7 +626,7 @@ public static class SeedData
                 Quantity = 210,
                 DateAdded = new DateTime(2025, 2, 18),
                 Location = "K-49",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -622,7 +637,7 @@ public static class SeedData
                 Quantity = 155,
                 DateAdded = new DateTime(2025, 1, 28),
                 Location = "N-50",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -633,7 +648,7 @@ public static class SeedData
                 Quantity = 72,
                 DateAdded = new DateTime(2024, 9, 9),
                 Location = "B-51",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -644,7 +659,7 @@ public static class SeedData
                 Quantity = 6,
                 DateAdded = new DateTime(2024, 7, 25),
                 Location = "F-52",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -655,7 +670,7 @@ public static class SeedData
                 Quantity = 88,
                 DateAdded = new DateTime(2025, 3, 3),
                 Location = "T-53",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -666,7 +681,7 @@ public static class SeedData
                 Quantity = 240,
                 DateAdded = new DateTime(2024, 12, 12),
                 Location = "C-54",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -677,7 +692,7 @@ public static class SeedData
                 Quantity = 115,
                 DateAdded = new DateTime(2025, 2, 22),
                 Location = "Q-55",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -688,7 +703,7 @@ public static class SeedData
                 Quantity = 4,
                 DateAdded = new DateTime(2024, 8, 5),
                 Location = "A-56",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -699,7 +714,7 @@ public static class SeedData
                 Quantity = 130,
                 DateAdded = new DateTime(2025, 1, 15),
                 Location = "E-57",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -710,7 +725,7 @@ public static class SeedData
                 Quantity = 165,
                 DateAdded = new DateTime(2024, 11, 8),
                 Location = "U-58",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -721,7 +736,7 @@ public static class SeedData
                 Quantity = 7,
                 DateAdded = new DateTime(2024, 10, 15),
                 Location = "I-59",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -732,7 +747,7 @@ public static class SeedData
                 Quantity = 320,
                 DateAdded = new DateTime(2025, 5, 5),
                 Location = "B-60",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -743,7 +758,7 @@ public static class SeedData
                 Quantity = 98,
                 DateAdded = new DateTime(2025, 4, 15),
                 Location = "A-61",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -754,7 +769,7 @@ public static class SeedData
                 Quantity = 22,
                 DateAdded = new DateTime(2024, 9, 18),
                 Location = "S-62",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -765,7 +780,7 @@ public static class SeedData
                 Quantity = 142,
                 DateAdded = new DateTime(2025, 3, 25),
                 Location = "B-63",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -776,7 +791,7 @@ public static class SeedData
                 Quantity = 5,
                 DateAdded = new DateTime(2024, 7, 10),
                 Location = "D-64",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -787,7 +802,7 @@ public static class SeedData
                 Quantity = 68,
                 DateAdded = new DateTime(2025, 2, 5),
                 Location = "H-65",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -798,7 +813,7 @@ public static class SeedData
                 Quantity = 175,
                 DateAdded = new DateTime(2024, 12, 28),
                 Location = "B-66",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -809,7 +824,7 @@ public static class SeedData
                 Quantity = 9,
                 DateAdded = new DateTime(2024, 8, 30),
                 Location = "A-67",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -820,7 +835,7 @@ public static class SeedData
                 Quantity = 105,
                 DateAdded = new DateTime(2025, 4, 18),
                 Location = "J-68",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -831,7 +846,7 @@ public static class SeedData
                 Quantity = 189,
                 DateAdded = new DateTime(2025, 1, 9),
                 Location = "J-69",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -842,7 +857,7 @@ public static class SeedData
                 Quantity = 3,
                 DateAdded = new DateTime(2024, 6, 20),
                 Location = "V-70",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -853,7 +868,7 @@ public static class SeedData
                 Quantity = 18,
                 DateAdded = new DateTime(2024, 11, 25),
                 Location = "B-71",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -864,7 +879,7 @@ public static class SeedData
                 Quantity = 92,
                 DateAdded = new DateTime(2025, 5, 10),
                 Location = "Q-72",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -875,7 +890,7 @@ public static class SeedData
                 Quantity = 45,
                 DateAdded = new DateTime(2025, 3, 8),
                 Location = "F-73",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -886,7 +901,7 @@ public static class SeedData
                 Quantity = 7,
                 DateAdded = new DateTime(2024, 7, 30),
                 Location = "B-74",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -897,7 +912,7 @@ public static class SeedData
                 Quantity = 125,
                 DateAdded = new DateTime(2025, 2, 12),
                 Location = "A-75",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -908,7 +923,7 @@ public static class SeedData
                 Quantity = 110,
                 DateAdded = new DateTime(2024, 10, 10),
                 Location = "S-76",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -919,7 +934,7 @@ public static class SeedData
                 Quantity = 6,
                 DateAdded = new DateTime(2024, 8, 12),
                 Location = "Q-77",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -930,7 +945,7 @@ public static class SeedData
                 Quantity = 200,
                 DateAdded = new DateTime(2024, 12, 1),
                 Location = "K-78",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -941,7 +956,7 @@ public static class SeedData
                 Quantity = 88,
                 DateAdded = new DateTime(2025, 4, 25),
                 Location = "E-79",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -952,7 +967,7 @@ public static class SeedData
                 Quantity = 135,
                 DateAdded = new DateTime(2025, 1, 22),
                 Location = "M-80",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -963,7 +978,7 @@ public static class SeedData
                 Quantity = 4,
                 DateAdded = new DateTime(2024, 9, 28),
                 Location = "A-81",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -974,7 +989,7 @@ public static class SeedData
                 Quantity = 240,
                 DateAdded = new DateTime(2025, 3, 17),
                 Location = "Q-82",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -985,7 +1000,7 @@ public static class SeedData
                 Quantity = 95,
                 DateAdded = new DateTime(2024, 11, 15),
                 Location = "B-83",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -996,7 +1011,7 @@ public static class SeedData
                 Quantity = 8,
                 DateAdded = new DateTime(2024, 6, 8),
                 Location = "C-84",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -1007,7 +1022,7 @@ public static class SeedData
                 Quantity = 32,
                 DateAdded = new DateTime(2025, 2, 1),
                 Location = "J-85",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1018,7 +1033,7 @@ public static class SeedData
                 Quantity = 170,
                 DateAdded = new DateTime(2025, 4, 30),
                 Location = "F-86",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1029,7 +1044,7 @@ public static class SeedData
                 Quantity = 62,
                 DateAdded = new DateTime(2024, 12, 20),
                 Location = "D-87",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1040,7 +1055,7 @@ public static class SeedData
                 Quantity = 5,
                 DateAdded = new DateTime(2024, 7, 18),
                 Location = "A-88",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1051,7 +1066,7 @@ public static class SeedData
                 Quantity = 118,
                 DateAdded = new DateTime(2025, 5, 15),
                 Location = "J-89",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1062,7 +1077,7 @@ public static class SeedData
                 Quantity = 145,
                 DateAdded = new DateTime(2025, 1, 30),
                 Location = "V-90",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1073,7 +1088,7 @@ public static class SeedData
                 Quantity = 2,
                 DateAdded = new DateTime(2024, 8, 22),
                 Location = "K-91",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -1084,7 +1099,7 @@ public static class SeedData
                 Quantity = 78,
                 DateAdded = new DateTime(2025, 3, 28),
                 Location = "M-92",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1095,7 +1110,7 @@ public static class SeedData
                 Quantity = 210,
                 DateAdded = new DateTime(2024, 10, 18),
                 Location = "U-93",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1106,7 +1121,7 @@ public static class SeedData
                 Quantity = 54,
                 DateAdded = new DateTime(2025, 2, 14),
                 Location = "N-94",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1117,7 +1132,7 @@ public static class SeedData
                 Quantity = 9,
                 DateAdded = new DateTime(2024, 9, 14),
                 Location = "J-95",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1128,7 +1143,7 @@ public static class SeedData
                 Quantity = 28,
                 DateAdded = new DateTime(2024, 11, 5),
                 Location = "B-96",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1139,7 +1154,7 @@ public static class SeedData
                 Quantity = 165,
                 DateAdded = new DateTime(2025, 4, 10),
                 Location = "E-97",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1150,7 +1165,7 @@ public static class SeedData
                 Quantity = 7,
                 DateAdded = new DateTime(2024, 6, 15),
                 Location = "I-98",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -1161,7 +1176,7 @@ public static class SeedData
                 Quantity = 85,
                 DateAdded = new DateTime(2025, 1, 18),
                 Location = "B-99",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1172,7 +1187,7 @@ public static class SeedData
                 Quantity = 112,
                 DateAdded = new DateTime(2025, 3, 5),
                 Location = "A-00",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1183,7 +1198,7 @@ public static class SeedData
                 Quantity = 98,
                 DateAdded = new DateTime(2024, 12, 10),
                 Location = "J-01",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1194,7 +1209,7 @@ public static class SeedData
                 Quantity = 3,
                 DateAdded = new DateTime(2024, 7, 5),
                 Location = "D-02",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1205,7 +1220,7 @@ public static class SeedData
                 Quantity = 45,
                 DateAdded = new DateTime(2025, 2, 20),
                 Location = "K-03",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1216,7 +1231,7 @@ public static class SeedData
                 Quantity = 128,
                 DateAdded = new DateTime(2025, 5, 22),
                 Location = "F-04",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1227,7 +1242,7 @@ public static class SeedData
                 Quantity = 6,
                 DateAdded = new DateTime(2024, 8, 8),
                 Location = "J-05",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -1238,7 +1253,7 @@ public static class SeedData
                 Quantity = 102,
                 DateAdded = new DateTime(2025, 4, 5),
                 Location = "B-06",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1249,7 +1264,7 @@ public static class SeedData
                 Quantity = 58,
                 DateAdded = new DateTime(2024, 11, 12),
                 Location = "Q-07",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1260,7 +1275,7 @@ public static class SeedData
                 Quantity = 280,
                 DateAdded = new DateTime(2025, 1, 25),
                 Location = "U-08",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1271,7 +1286,7 @@ public static class SeedData
                 Quantity = 8,
                 DateAdded = new DateTime(2024, 9, 1),
                 Location = "A-09",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1282,7 +1297,7 @@ public static class SeedData
                 Quantity = 195,
                 DateAdded = new DateTime(2025, 3, 15),
                 Location = "J-10",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1293,7 +1308,7 @@ public static class SeedData
                 Quantity = 115,
                 DateAdded = new DateTime(2024, 12, 15),
                 Location = "D-11",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1304,7 +1319,7 @@ public static class SeedData
                 Quantity = 4,
                 DateAdded = new DateTime(2024, 6, 25),
                 Location = "A-12",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -1315,7 +1330,7 @@ public static class SeedData
                 Quantity = 160,
                 DateAdded = new DateTime(2025, 2, 28),
                 Location = "B-13",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1326,7 +1341,7 @@ public static class SeedData
                 Quantity = 92,
                 DateAdded = new DateTime(2025, 5, 8),
                 Location = "J-14",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1337,7 +1352,7 @@ public static class SeedData
                 Quantity = 72,
                 DateAdded = new DateTime(2024, 10, 3),
                 Location = "F-15",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1348,7 +1363,7 @@ public static class SeedData
                 Quantity = 9,
                 DateAdded = new DateTime(2024, 8, 28),
                 Location = "E-16",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1359,7 +1374,7 @@ public static class SeedData
                 Quantity = 138,
                 DateAdded = new DateTime(2025, 1, 10),
                 Location = "J-17",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1370,7 +1385,7 @@ public static class SeedData
                 Quantity = 5,
                 DateAdded = new DateTime(2024, 7, 22),
                 Location = "Q-18",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -1381,7 +1396,7 @@ public static class SeedData
                 Quantity = 105,
                 DateAdded = new DateTime(2025, 4, 12),
                 Location = "U-19",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1392,7 +1407,7 @@ public static class SeedData
                 Quantity = 175,
                 DateAdded = new DateTime(2024, 11, 28),
                 Location = "B-20",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1403,7 +1418,7 @@ public static class SeedData
                 Quantity = 210,
                 DateAdded = new DateTime(2025, 3, 1),
                 Location = "I-21",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1414,7 +1429,7 @@ public static class SeedData
                 Quantity = 8,
                 DateAdded = new DateTime(2024, 9, 10),
                 Location = "H-22",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1425,7 +1440,7 @@ public static class SeedData
                 Quantity = 88,
                 DateAdded = new DateTime(2025, 2, 6),
                 Location = "B-23",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1436,7 +1451,7 @@ public static class SeedData
                 Quantity = 42,
                 DateAdded = new DateTime(2024, 12, 22),
                 Location = "A-24",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1447,7 +1462,7 @@ public static class SeedData
                 Quantity = 6,
                 DateAdded = new DateTime(2024, 6, 30),
                 Location = "J-25",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -1458,7 +1473,7 @@ public static class SeedData
                 Quantity = 125,
                 DateAdded = new DateTime(2025, 1, 8),
                 Location = "Q-26",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1469,7 +1484,7 @@ public static class SeedData
                 Quantity = 98,
                 DateAdded = new DateTime(2025, 5, 1),
                 Location = "R-27",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1480,7 +1495,7 @@ public static class SeedData
                 Quantity = 72,
                 DateAdded = new DateTime(2024, 10, 8),
                 Location = "O-28",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1491,7 +1506,7 @@ public static class SeedData
                 Quantity = 3,
                 DateAdded = new DateTime(2024, 7, 12),
                 Location = "N-29",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1502,7 +1517,7 @@ public static class SeedData
                 Quantity = 110,
                 DateAdded = new DateTime(2025, 3, 22),
                 Location = "J-30",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1513,7 +1528,7 @@ public static class SeedData
                 Quantity = 155,
                 DateAdded = new DateTime(2024, 11, 18),
                 Location = "B-31",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1524,7 +1539,7 @@ public static class SeedData
                 Quantity = 7,
                 DateAdded = new DateTime(2024, 8, 16),
                 Location = "D-32",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -1535,7 +1550,7 @@ public static class SeedData
                 Quantity = 82,
                 DateAdded = new DateTime(2025, 2, 25),
                 Location = "I-33",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1546,7 +1561,7 @@ public static class SeedData
                 Quantity = 125,
                 DateAdded = new DateTime(2025, 4, 28),
                 Location = "J-34",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1557,7 +1572,7 @@ public static class SeedData
                 Quantity = 55,
                 DateAdded = new DateTime(2024, 9, 22),
                 Location = "S-35",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1568,7 +1583,7 @@ public static class SeedData
                 Quantity = 9,
                 DateAdded = new DateTime(2024, 6, 18),
                 Location = "B-36",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1579,7 +1594,7 @@ public static class SeedData
                 Quantity = 340,
                 DateAdded = new DateTime(2025, 1, 12),
                 Location = "K-37",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1590,7 +1605,7 @@ public static class SeedData
                 Quantity = 198,
                 DateAdded = new DateTime(2025, 5, 20),
                 Location = "V-38",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1601,7 +1616,7 @@ public static class SeedData
                 Quantity = 4,
                 DateAdded = new DateTime(2024, 7, 28),
                 Location = "H-39",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -1612,7 +1627,7 @@ public static class SeedData
                 Quantity = 38,
                 DateAdded = new DateTime(2025, 3, 10),
                 Location = "A-40",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1623,7 +1638,7 @@ public static class SeedData
                 Quantity = 165,
                 DateAdded = new DateTime(2024, 12, 3),
                 Location = "J-41",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1634,7 +1649,7 @@ public static class SeedData
                 Quantity = 92,
                 DateAdded = new DateTime(2025, 2, 16),
                 Location = "Q-42",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1645,7 +1660,7 @@ public static class SeedData
                 Quantity = 6,
                 DateAdded = new DateTime(2024, 8, 4),
                 Location = "M-43",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1656,7 +1671,7 @@ public static class SeedData
                 Quantity = 275,
                 DateAdded = new DateTime(2025, 4, 22),
                 Location = "K-44",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1667,7 +1682,7 @@ public static class SeedData
                 Quantity = 180,
                 DateAdded = new DateTime(2024, 10, 25),
                 Location = "B-45",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1678,7 +1693,7 @@ public static class SeedData
                 Quantity = 7,
                 DateAdded = new DateTime(2024, 6, 5),
                 Location = "A-46",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -1689,7 +1704,7 @@ public static class SeedData
                 Quantity = 220,
                 DateAdded = new DateTime(2025, 1, 28),
                 Location = "J-47",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1700,7 +1715,7 @@ public static class SeedData
                 Quantity = 85,
                 DateAdded = new DateTime(2025, 5, 12),
                 Location = "F-48",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1711,7 +1726,7 @@ public static class SeedData
                 Quantity = 5,
                 DateAdded = new DateTime(2024, 9, 15),
                 Location = "D-49",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1722,7 +1737,7 @@ public static class SeedData
                 Quantity = 62,
                 DateAdded = new DateTime(2024, 11, 20),
                 Location = "B-50",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1733,7 +1748,7 @@ public static class SeedData
                 Quantity = 450,
                 DateAdded = new DateTime(2025, 3, 18),
                 Location = "H-51",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1744,7 +1759,7 @@ public static class SeedData
                 Quantity = 8,
                 DateAdded = new DateTime(2024, 7, 8),
                 Location = "A-52",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -1755,7 +1770,7 @@ public static class SeedData
                 Quantity = 98,
                 DateAdded = new DateTime(2025, 2, 10),
                 Location = "J-53",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1766,7 +1781,7 @@ public static class SeedData
                 Quantity = 215,
                 DateAdded = new DateTime(2024, 12, 8),
                 Location = "N-54",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1777,7 +1792,7 @@ public static class SeedData
                 Quantity = 105,
                 DateAdded = new DateTime(2025, 4, 16),
                 Location = "B-55",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1788,7 +1803,7 @@ public static class SeedData
                 Quantity = 3,
                 DateAdded = new DateTime(2024, 8, 25),
                 Location = "K-56",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1799,7 +1814,7 @@ public static class SeedData
                 Quantity = 68,
                 DateAdded = new DateTime(2025, 1, 16),
                 Location = "I-57",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1810,7 +1825,7 @@ public static class SeedData
                 Quantity = 145,
                 DateAdded = new DateTime(2025, 5, 28),
                 Location = "W-58",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1821,7 +1836,7 @@ public static class SeedData
                 Quantity = 9,
                 DateAdded = new DateTime(2024, 9, 20),
                 Location = "B-59",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -1832,7 +1847,7 @@ public static class SeedData
                 Quantity = 190,
                 DateAdded = new DateTime(2025, 3, 6),
                 Location = "G-60",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1843,7 +1858,7 @@ public static class SeedData
                 Quantity = 6,
                 DateAdded = new DateTime(2024, 6, 12),
                 Location = "U-61",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1854,7 +1869,7 @@ public static class SeedData
                 Quantity = 78,
                 DateAdded = new DateTime(2025, 2, 23),
                 Location = "J-62",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1865,7 +1880,7 @@ public static class SeedData
                 Quantity = 52,
                 DateAdded = new DateTime(2024, 10, 12),
                 Location = "H-63",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1876,7 +1891,7 @@ public static class SeedData
                 Quantity = 185,
                 DateAdded = new DateTime(2025, 4, 6),
                 Location = "F-64",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1887,7 +1902,7 @@ public static class SeedData
                 Quantity = 112,
                 DateAdded = new DateTime(2024, 11, 10),
                 Location = "B-65",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1898,7 +1913,7 @@ public static class SeedData
                 Quantity = 4,
                 DateAdded = new DateTime(2024, 7, 16),
                 Location = "Q-66",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -1909,7 +1924,7 @@ public static class SeedData
                 Quantity = 48,
                 DateAdded = new DateTime(2025, 1, 20),
                 Location = "A-67",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1920,7 +1935,7 @@ public static class SeedData
                 Quantity = 95,
                 DateAdded = new DateTime(2025, 5, 25),
                 Location = "J-68",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1931,7 +1946,7 @@ public static class SeedData
                 Quantity = 138,
                 DateAdded = new DateTime(2024, 12, 16),
                 Location = "N-69",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1942,7 +1957,7 @@ public static class SeedData
                 Quantity = 8,
                 DateAdded = new DateTime(2024, 8, 10),
                 Location = "B-70",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1953,7 +1968,7 @@ public static class SeedData
                 Quantity = 380,
                 DateAdded = new DateTime(2025, 3, 12),
                 Location = "K-71",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1964,7 +1979,7 @@ public static class SeedData
                 Quantity = 7,
                 DateAdded = new DateTime(2024, 6, 22),
                 Location = "F-72",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -1975,7 +1990,7 @@ public static class SeedData
                 Quantity = 125,
                 DateAdded = new DateTime(2025, 2, 8),
                 Location = "B-73",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1986,7 +2001,7 @@ public static class SeedData
                 Quantity = 165,
                 DateAdded = new DateTime(2024, 10, 20),
                 Location = "H-74",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -1997,7 +2012,7 @@ public static class SeedData
                 Quantity = 5,
                 DateAdded = new DateTime(2024, 7, 2),
                 Location = "P-75",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -2008,7 +2023,7 @@ public static class SeedData
                 Quantity = 88,
                 DateAdded = new DateTime(2025, 4, 24),
                 Location = "J-76",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -2019,7 +2034,7 @@ public static class SeedData
                 Quantity = 280,
                 DateAdded = new DateTime(2025, 1, 6),
                 Location = "V-77",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -2030,7 +2045,7 @@ public static class SeedData
                 Quantity = 9,
                 DateAdded = new DateTime(2024, 9, 8),
                 Location = "A-78",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -2041,7 +2056,7 @@ public static class SeedData
                 Quantity = 115,
                 DateAdded = new DateTime(2025, 5, 6),
                 Location = "J-79",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -2052,7 +2067,7 @@ public static class SeedData
                 Quantity = 142,
                 DateAdded = new DateTime(2024, 11, 2),
                 Location = "O-80",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -2063,7 +2078,7 @@ public static class SeedData
                 Quantity = 6,
                 DateAdded = new DateTime(2024, 6, 28),
                 Location = "D-81",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -2074,7 +2089,7 @@ public static class SeedData
                 Quantity = 175,
                 DateAdded = new DateTime(2025, 3, 28),
                 Location = "U-82",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -2085,7 +2100,7 @@ public static class SeedData
                 Quantity = 92,
                 DateAdded = new DateTime(2024, 12, 25),
                 Location = "K-83",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -2096,7 +2111,7 @@ public static class SeedData
                 Quantity = 7,
                 DateAdded = new DateTime(2024, 8, 18),
                 Location = "F-84",
-                IsActive = false
+                IsActive = false,
             },
             new()
             {
@@ -2107,7 +2122,7 @@ public static class SeedData
                 Quantity = 205,
                 DateAdded = new DateTime(2025, 2, 4),
                 Location = "J-85",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -2118,7 +2133,7 @@ public static class SeedData
                 Quantity = 310,
                 DateAdded = new DateTime(2025, 5, 18),
                 Location = "B-86",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -2129,7 +2144,7 @@ public static class SeedData
                 Quantity = 3,
                 DateAdded = new DateTime(2024, 9, 25),
                 Location = "I-87",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -2140,7 +2155,7 @@ public static class SeedData
                 Quantity = 85,
                 DateAdded = new DateTime(2025, 1, 14),
                 Location = "H-88",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -2151,7 +2166,7 @@ public static class SeedData
                 Quantity = 8,
                 DateAdded = new DateTime(2024, 6, 8),
                 Location = "A-89",
-                IsActive = true
+                IsActive = true,
             },
             new()
             {
@@ -2162,8 +2177,8 @@ public static class SeedData
                 Quantity = 122,
                 DateAdded = new DateTime(2025, 4, 2),
                 Location = "J-90",
-                IsActive = true
-            }
+                IsActive = true,
+            },
         };
 
         await context.AddRangeAsync(products);

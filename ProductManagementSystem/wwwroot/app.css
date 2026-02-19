@@ -77,7 +77,7 @@ h1:focus {
 }
 
 /*Removes empty table rows*/
-.table tbody tr:not([aria-rowindex]) {
+table.quickgrid > tbody > tr:not([aria-rowindex]) {
     display: none;
 }
 

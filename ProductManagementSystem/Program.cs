@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using AspNet.Security.OAuth.GitHub;
+using Microsoft.AspNetCore.Authentication.Facebook;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
+using Microsoft.AspNetCore.Authentication.Twitter;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProductManagementSystem.Components;
@@ -7,19 +12,45 @@ using ProductManagementSystem.Data;
 using ProductManagementSystem.Services.Email;
 using ProductManagementSystem.Services.Products;
 using Serilog;
-using Serilog.Sinks.MSSqlServer;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Information()
-    .Enrich.FromLogContext()
-    .WriteTo.MSSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MSSqlServerSinkOptions { TableName = "Logs", AutoCreateSqlTable = true }
-    )
-    .CreateLogger();
+var sqliteRelativePath = builder.Configuration["Serilog:SqlitePath"] ?? "Data/logs.db";
+var sqliteFullPath = Path.Combine(builder.Environment.ContentRootPath, sqliteRelativePath);
+Directory.CreateDirectory(Path.GetDirectoryName(sqliteFullPath)!);
 
+var loggerConfig = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+    .MinimumLevel.Override("System", LogEventLevel.Warning)
+    .Enrich.FromLogContext();
+
+try
+{
+    // Requires the Serilog SQLite sink package (e.g., Serilog.Sinks.SQLite)
+    loggerConfig = loggerConfig.WriteTo.SQLite(sqliteFullPath);
+}
+catch (Exception ex)
+{
+    // Safe fallback so the app still starts even if SQLite logging fails
+    loggerConfig = loggerConfig
+        .WriteTo.Console()
+        .WriteTo.File(
+            path: Path.Combine(builder.Environment.ContentRootPath, "Logs", "fallback-.log"),
+            rollingInterval: RollingInterval.Day
+        );
+
+    // Create a temporary logger to record why SQLite failed
+    Log.Logger = loggerConfig.CreateLogger();
+    Log.Warning(
+        ex,
+        "SQLite logging sink failed to initialize. Falling back to console/file logging."
+    );
+}
+
+Log.Logger = loggerConfig.CreateLogger();
 builder.Host.UseSerilog();
 
 // Add services to the container.
@@ -39,6 +70,93 @@ builder
         options.DefaultScheme = IdentityConstants.ApplicationScheme;
         options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
     })
+    .AddGoogle(
+        GoogleDefaults.AuthenticationScheme,
+        options =>
+        {
+            options.ClientId =
+                builder.Configuration["Authentication:Google:ClientId"]
+                ?? throw new InvalidOperationException(
+                    "Missing Authentication:Google:ClientId configuration."
+                );
+
+            options.ClientSecret =
+                builder.Configuration["Authentication:Google:ClientSecret"]
+                ?? throw new InvalidOperationException(
+                    "Missing Authentication:Google:ClientSecret configuration."
+                );
+        }
+    )
+    .AddFacebook(
+        FacebookDefaults.AuthenticationScheme,
+        options =>
+        {
+            options.AppId =
+                builder.Configuration["Authentication:Facebook:AppId"]
+                ?? throw new InvalidOperationException(
+                    "Missing Authentication:Facebook:AppId configuration."
+                );
+
+            options.AppSecret =
+                builder.Configuration["Authentication:Facebook:AppSecret"]
+                ?? throw new InvalidOperationException(
+                    "Missing Authentication:Facebook:AppSecret configuration."
+                );
+        }
+    )
+    .AddGitHub(
+        GitHubAuthenticationDefaults.AuthenticationScheme,
+        options =>
+        {
+            options.ClientId =
+                builder.Configuration["Authentication:GitHub:ClientId"]
+                ?? throw new InvalidOperationException(
+                    "Missing Authentication:GitHub:ClientId configuration."
+                );
+
+            options.ClientSecret =
+                builder.Configuration["Authentication:GitHub:ClientSecret"]
+                ?? throw new InvalidOperationException(
+                    "Missing Authentication:GitHub:ClientSecret configuration."
+                );
+
+            // Optional but commonly useful: request the user's email address
+            options.Scope.Add("user:email");
+        }
+    )
+    .AddMicrosoftAccount(
+        MicrosoftAccountDefaults.AuthenticationScheme,
+        options =>
+        {
+            options.ClientId =
+                builder.Configuration["Authentication:Microsoft:ClientId"]
+                ?? throw new InvalidOperationException(
+                    "Missing Authentication:Microsoft:ClientId configuration."
+                );
+            options.ClientSecret =
+                builder.Configuration["Authentication:Microsoft:ClientSecret"]
+                ?? throw new InvalidOperationException(
+                    "Missing Authentication:Microsoft:ClientSecret configuration."
+                );
+        }
+    )
+    .AddTwitter(
+        TwitterDefaults.AuthenticationScheme,
+        options =>
+        {
+            options.ConsumerKey =
+                builder.Configuration["Authentication:Twitter:ConsumerKey"]
+                ?? throw new InvalidOperationException(
+                    "Missing Authentication:Twitter:ConsumerKey configuration."
+                );
+
+            options.ConsumerSecret =
+                builder.Configuration["Authentication:Twitter:ConsumerSecret"]
+                ?? throw new InvalidOperationException(
+                    "Missing Authentication:Twitter:ConsumerSecret configuration."
+                );
+        }
+    )
     .AddIdentityCookies();
 
 var connectionString =
@@ -108,14 +226,20 @@ app.UseRouting();
 // Authentication / Authorization middleware if Identity endpoints are used
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseAntiforgery();
 app.MapStaticAssets();
 app.MapRazorPages();
 
 // Identity Razor endpoints
 app.MapAdditionalIdentityEndpoints();
-app.UseAntiforgery();
 
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
-app.Run();
+try
+{
+    app.Run();
+}
+finally
+{
+    Log.CloseAndFlush();
+}
