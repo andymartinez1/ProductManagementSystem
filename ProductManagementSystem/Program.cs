@@ -1,4 +1,6 @@
-﻿using AspNet.Security.OAuth.GitHub;
+﻿using System.Security.Claims;
+using AspNet.Security.OAuth.GitHub;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
@@ -38,7 +40,7 @@ catch (Exception ex)
     loggerConfig = loggerConfig
         .WriteTo.Console()
         .WriteTo.File(
-            path: Path.Combine(builder.Environment.ContentRootPath, "Logs", "fallback-.log"),
+            Path.Combine(builder.Environment.ContentRootPath, "Logs", "fallback-.log"),
             rollingInterval: RollingInterval.Day
         );
 
@@ -102,6 +104,9 @@ builder
                 ?? throw new InvalidOperationException(
                     "Missing Authentication:Facebook:AppSecret configuration."
                 );
+            options.Scope.Add("email");
+            options.Fields.Add("email");
+            options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
         }
     )
     .AddGitHub(
@@ -155,6 +160,7 @@ builder
                 ?? throw new InvalidOperationException(
                     "Missing Authentication:Twitter:ConsumerSecret configuration."
                 );
+            options.RetrieveUserDetails = true;
         }
     )
     .AddIdentityCookies();

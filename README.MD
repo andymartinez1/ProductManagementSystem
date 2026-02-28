@@ -29,7 +29,7 @@ Admin view:
 
 ## YouTube Video demo
 
-[![Product Management System](https://img.youtube.com/vi/W6wU931eC2Y/0.jpg)](https://www.youtube.com/watch?v=W6wU931eC2Y)
+[![Product Management System](https://img.youtube.com/vi/thTlFYW68hw/0.jpg)](https://www.youtube.com/watch?v=thTlFYW68hw)
 
 ## Getting Started
 
