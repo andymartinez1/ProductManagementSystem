@@ -28,6 +28,7 @@ Admin view:
 - External auth using Google, Facebook, GitHub, Microsoft and Twitter
 
 ## YouTube Video demo
+
 [![Product Management System](https://img.youtube.com/vi/W6wU931eC2Y/0.jpg)](https://www.youtube.com/watch?v=W6wU931eC2Y)
 
 ## Getting Started
