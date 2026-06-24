@@ -1,5 +1,5 @@
 <Solution>
-    <Project Path="ProductManagementSystem.IntegrationTests/ProductManagementSystem.IntegrationTests.csproj"/>
-    <Project Path="ProductManagementSystem.UnitTests/ProductManagementSystem.UnitTests.csproj"/>
-    <Project Path="ProductManagementSystem/ProductManagementSystem.csproj"/>
+    <Project Path="tests/ProductManagementSystem.IntegrationTests/ProductManagementSystem.IntegrationTests.csproj"/>
+    <Project Path="tests/ProductManagementSystem.UnitTests/ProductManagementSystem.UnitTests.csproj"/>
+    <Project Path="src/ProductManagementSystem/ProductManagementSystem.csproj"/>
 </Solution>

@@ -72,97 +72,97 @@ builder
         options.DefaultScheme = IdentityConstants.ApplicationScheme;
         options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
     })
-    .AddGoogle(
-        GoogleDefaults.AuthenticationScheme,
-        options =>
-        {
-            options.ClientId =
-                builder.Configuration["Authentication:Google:ClientId"]
-                ?? throw new InvalidOperationException(
-                    "Missing Authentication:Google:ClientId configuration."
-                );
-
-            options.ClientSecret =
-                builder.Configuration["Authentication:Google:ClientSecret"]
-                ?? throw new InvalidOperationException(
-                    "Missing Authentication:Google:ClientSecret configuration."
-                );
-        }
-    )
-    .AddFacebook(
-        FacebookDefaults.AuthenticationScheme,
-        options =>
-        {
-            options.AppId =
-                builder.Configuration["Authentication:Facebook:AppId"]
-                ?? throw new InvalidOperationException(
-                    "Missing Authentication:Facebook:AppId configuration."
-                );
-
-            options.AppSecret =
-                builder.Configuration["Authentication:Facebook:AppSecret"]
-                ?? throw new InvalidOperationException(
-                    "Missing Authentication:Facebook:AppSecret configuration."
-                );
-            options.Scope.Add("email");
-            options.Fields.Add("email");
-            options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
-        }
-    )
-    .AddGitHub(
-        GitHubAuthenticationDefaults.AuthenticationScheme,
-        options =>
-        {
-            options.ClientId =
-                builder.Configuration["Authentication:GitHub:ClientId"]
-                ?? throw new InvalidOperationException(
-                    "Missing Authentication:GitHub:ClientId configuration."
-                );
-
-            options.ClientSecret =
-                builder.Configuration["Authentication:GitHub:ClientSecret"]
-                ?? throw new InvalidOperationException(
-                    "Missing Authentication:GitHub:ClientSecret configuration."
-                );
-
-            // Optional but commonly useful: request the user's email address
-            options.Scope.Add("user:email");
-        }
-    )
-    .AddMicrosoftAccount(
-        MicrosoftAccountDefaults.AuthenticationScheme,
-        options =>
-        {
-            options.ClientId =
-                builder.Configuration["Authentication:Microsoft:ClientId"]
-                ?? throw new InvalidOperationException(
-                    "Missing Authentication:Microsoft:ClientId configuration."
-                );
-            options.ClientSecret =
-                builder.Configuration["Authentication:Microsoft:ClientSecret"]
-                ?? throw new InvalidOperationException(
-                    "Missing Authentication:Microsoft:ClientSecret configuration."
-                );
-        }
-    )
-    .AddTwitter(
-        TwitterDefaults.AuthenticationScheme,
-        options =>
-        {
-            options.ConsumerKey =
-                builder.Configuration["Authentication:Twitter:ConsumerKey"]
-                ?? throw new InvalidOperationException(
-                    "Missing Authentication:Twitter:ConsumerKey configuration."
-                );
-
-            options.ConsumerSecret =
-                builder.Configuration["Authentication:Twitter:ConsumerSecret"]
-                ?? throw new InvalidOperationException(
-                    "Missing Authentication:Twitter:ConsumerSecret configuration."
-                );
-            options.RetrieveUserDetails = true;
-        }
-    )
+    // .AddGoogle(
+    //     GoogleDefaults.AuthenticationScheme,
+    //     options =>
+    //     {
+    //         options.ClientId =
+    //             builder.Configuration["Authentication:Google:ClientId"]
+    //             ?? throw new InvalidOperationException(
+    //                 "Missing Authentication:Google:ClientId configuration."
+    //             );
+    //
+    //         options.ClientSecret =
+    //             builder.Configuration["Authentication:Google:ClientSecret"]
+    //             ?? throw new InvalidOperationException(
+    //                 "Missing Authentication:Google:ClientSecret configuration."
+    //             );
+    //     }
+    // )
+    // .AddFacebook(
+    //     FacebookDefaults.AuthenticationScheme,
+    //     options =>
+    //     {
+    //         options.AppId =
+    //             builder.Configuration["Authentication:Facebook:AppId"]
+    //             ?? throw new InvalidOperationException(
+    //                 "Missing Authentication:Facebook:AppId configuration."
+    //             );
+    //
+    //         options.AppSecret =
+    //             builder.Configuration["Authentication:Facebook:AppSecret"]
+    //             ?? throw new InvalidOperationException(
+    //                 "Missing Authentication:Facebook:AppSecret configuration."
+    //             );
+    //         options.Scope.Add("email");
+    //         options.Fields.Add("email");
+    //         options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+    //     }
+    // )
+    // .AddGitHub(
+    //     GitHubAuthenticationDefaults.AuthenticationScheme,
+    //     options =>
+    //     {
+    //         options.ClientId =
+    //             builder.Configuration["Authentication:GitHub:ClientId"]
+    //             ?? throw new InvalidOperationException(
+    //                 "Missing Authentication:GitHub:ClientId configuration."
+    //             );
+    //
+    //         options.ClientSecret =
+    //             builder.Configuration["Authentication:GitHub:ClientSecret"]
+    //             ?? throw new InvalidOperationException(
+    //                 "Missing Authentication:GitHub:ClientSecret configuration."
+    //             );
+    //
+    //         // Optional but commonly useful: request the user's email address
+    //         options.Scope.Add("user:email");
+    //     }
+    // )
+    // .AddMicrosoftAccount(
+    //     MicrosoftAccountDefaults.AuthenticationScheme,
+    //     options =>
+    //     {
+    //         options.ClientId =
+    //             builder.Configuration["Authentication:Microsoft:ClientId"]
+    //             ?? throw new InvalidOperationException(
+    //                 "Missing Authentication:Microsoft:ClientId configuration."
+    //             );
+    //         options.ClientSecret =
+    //             builder.Configuration["Authentication:Microsoft:ClientSecret"]
+    //             ?? throw new InvalidOperationException(
+    //                 "Missing Authentication:Microsoft:ClientSecret configuration."
+    //             );
+    //     }
+    // )
+    // .AddTwitter(
+    //     TwitterDefaults.AuthenticationScheme,
+    //     options =>
+    //     {
+    //         options.ConsumerKey =
+    //             builder.Configuration["Authentication:Twitter:ConsumerKey"]
+    //             ?? throw new InvalidOperationException(
+    //                 "Missing Authentication:Twitter:ConsumerKey configuration."
+    //             );
+    //
+    //         options.ConsumerSecret =
+    //             builder.Configuration["Authentication:Twitter:ConsumerSecret"]
+    //             ?? throw new InvalidOperationException(
+    //                 "Missing Authentication:Twitter:ConsumerSecret configuration."
+    //             );
+    //         options.RetrieveUserDetails = true;
+    //     }
+    // )
     .AddIdentityCookies();
 
 var connectionString =
