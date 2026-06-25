@@ -12,10 +12,10 @@ system offers a responsive and interactive user interface with real-time updates
 capabilities.
 
 Employee view:
-![Products](ProductManagementSystem/docs/images/products.png)
+![products.png](docs/images/products.png)
 
 Admin view:
-![admin-products.png](ProductManagementSystem/docs/images/admin-products.png)
+![admin-products.png](docs/images/admin-products.png)
 
 ## Features
 
@@ -56,10 +56,10 @@ Admin view:
     - Username: tremayne.kunze@ethereal.email
     - Password: wGKmsApFwbc6hJtZW1
 
-   ![ethereal-email.png](ProductManagementSystem/docs/images/ethereal-email.png)
+   ![ethereal-email.png](docs/images/ethereal-email.png)
 
    Go to messages:
-   ![ethereal-email-messages.png](ProductManagementSystem/docs/images/ethereal-email-messages.png)
+   ![ethereal-email-messages.png](docs/images/ethereal-email-messages.png)
 
    Email confirmations, password reset emails and forgotten password emails will be sent here.
 
