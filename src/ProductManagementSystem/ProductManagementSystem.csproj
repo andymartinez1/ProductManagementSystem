@@ -31,7 +31,6 @@
         <PackageReference Include="Serilog.Sinks.SQLite" Version="7.0.0"/>
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="docs\images\"/>
         <Folder Include="wwwroot\lib\"/>
     </ItemGroup>
 </Project>

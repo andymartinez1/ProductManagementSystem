@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductManagementSystem.Data;
-using ProductManagementSystem.DTO.Extensions;
 using ProductManagementSystem.DTO.Products;
+using ProductManagementSystem.Models;
 
 namespace ProductManagementSystem.Services.Products;
 
@@ -31,21 +31,23 @@ public class ProductService : IProductService
         catch (DbUpdateConcurrencyException ex)
         {
             _logger.LogWarning(ex, "Concurrency conflict while adding product.");
-            return product.ToProductResponse();
+            return ToProductResponse(product);
         }
         catch (DbUpdateException ex)
         {
             _logger.LogError(ex, "Database update failed while adding product.");
-            return product.ToProductResponse();
+            return ToProductResponse(product);
         }
 
         _logger.LogInformation("Product with ID: {productId} added.", product.Id);
-        return product.ToProductResponse();
+        return ToProductResponse(product);
     }
 
     public async Task<List<ProductResponse>> GetAllProductsAsync()
     {
-        return await _context.Products.Select(p => p.ToProductResponse()).ToListAsync();
+        return await _context.Products
+            .Select(product => ToProductResponse(product))
+            .ToListAsync();
     }
 
     public async Task<ProductResponse?> GetProductAsync(int? id)
@@ -55,7 +57,7 @@ public class ProductService : IProductService
 
         var product = await _context.Products.FindAsync(id);
 
-        return product?.ToProductResponse();
+        return product is null ? null : ToProductResponse(product);
     }
 
     public async Task<ProductResponse> UpdateProductAsync(ProductUpdateRequest? updateRequest)
@@ -85,17 +87,17 @@ public class ProductService : IProductService
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            _logger.LogWarning(ex, "Concurrency conflict while adding product.");
-            return productToUpdate.ToProductResponse();
+            _logger.LogWarning(ex, "Concurrency conflict while updating product.");
+            return ToProductResponse(productToUpdate);
         }
         catch (DbUpdateException ex)
         {
-            _logger.LogError(ex, "Database update failed while adding product.");
-            return productToUpdate.ToProductResponse();
+            _logger.LogError(ex, "Database update failed while updating product.");
+            return ToProductResponse(productToUpdate);
         }
 
         _logger.LogInformation("Product with ID: {productId} updated.", productToUpdate.Id);
-        return productToUpdate.ToProductResponse();
+        return ToProductResponse(productToUpdate);
     }
 
     public async Task<bool> DeleteProductAsync(int? id)
@@ -116,16 +118,32 @@ public class ProductService : IProductService
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            _logger.LogWarning(ex, "Concurrency conflict while adding product.");
+            _logger.LogWarning(ex, "Concurrency conflict while deleting product.");
             return false;
         }
         catch (DbUpdateException ex)
         {
-            _logger.LogError(ex, "Database update failed while adding product.");
+            _logger.LogError(ex, "Database update failed while deleting product.");
             return false;
         }
 
         _logger.LogInformation("Product with ID: {productId} removed.", product.Id);
         return true;
+    }
+
+    private static ProductResponse ToProductResponse(Product product)
+    {
+        return new ProductResponse
+        {
+            Id = product.Id,
+            ProductName = product.ProductName,
+            Sku = product.Sku,
+            Category = product.Category,
+            Price = product.Price,
+            DateAdded = product.DateAdded,
+            Location = product.Location,
+            IsActive = product.IsActive,
+            Quantity = product.Quantity
+        };
     }
 }

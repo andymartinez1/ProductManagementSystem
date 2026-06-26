@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace ProductManagementSystem.DTO.Extensions;
+namespace ProductManagementSystem.Utils;
 
 public static class EnumExtensions
 {
