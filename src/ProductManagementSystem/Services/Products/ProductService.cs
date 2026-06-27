@@ -45,9 +45,12 @@ public class ProductService : IProductService
 
     public async Task<List<ProductResponse>> GetAllProductsAsync()
     {
-        return await _context.Products
+        var products = await _context.Products
+            .AsNoTracking()
             .Select(product => ToProductResponse(product))
             .ToListAsync();
+
+        return products;
     }
 
     public async Task<ProductResponse?> GetProductAsync(int? id)
@@ -55,7 +58,9 @@ public class ProductService : IProductService
         if (id is null)
             return null;
 
-        var product = await _context.Products.FindAsync(id);
+        var product = await _context.Products
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Id == id);
 
         return product is null ? null : ToProductResponse(product);
     }
