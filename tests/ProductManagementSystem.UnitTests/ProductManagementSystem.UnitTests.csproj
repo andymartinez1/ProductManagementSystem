@@ -23,6 +23,6 @@
     <Using Include="Xunit" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ProductManagementSystem\ProductManagementSystem.csproj" />
+    <ProjectReference Include="..\..\src\ProductManagementSystem\ProductManagementSystem.csproj" />
   </ItemGroup>
 </Project>
