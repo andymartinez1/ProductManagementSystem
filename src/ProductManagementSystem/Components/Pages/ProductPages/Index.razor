@@ -18,139 +18,178 @@
 }
 else
 {
-    <div class="container-fluid">
+    <div class="container-fluid py-4">
 
         @if (_isManagerOrAdmin)
         {
-            <div class="row align-items-center justify-content-between g-2 mb-3">
-                <div class="col-md-3">
+            <div class="row align-items-stretch g-3 mb-4">
+                <div class="col-sm-6 col-xl-3">
                     <ProductCard Title="Total Items" IconClass="bi bi-box-seam" Count=@_totalItems
                                  ShortDescription="Across all locations"/>
                 </div>
-                <div class="col-md-3">
+                <div class="col-sm-6 col-xl-3">
                     <ProductCard Title="Low Stock Items" IconClass="bi bi-exclamation-triangle"
                                  Count=@_totalLowStockItems
                                  ShortDescription="Require restocking"/>
                 </div>
-                <div class="col-md-3">
+                <div class="col-sm-6 col-xl-3">
                     <ProductCard Title="Total Value" IconClass="bi bi-graph-up-arrow" Count=@($"${_totalPrice}")
                                  ShortDescription="Current inventory value"/>
                 </div>
-                <div class="col-md-3">
+                <div class="col-sm-6 col-xl-3">
                     <ProductCard Title="Categories" IconClass="bi bi-tags" Count=@_categoryCount
                                  ShortDescription="Product categories"/>
                 </div>
             </div>
         }
 
-        <div class="row align-items-center justify-content-end g-2 mb-3">
-            <div class="col-auto">
-                <Button Color="ButtonColor.Info" Outline="true" @onclick=ShowContent><i class="bi bi-filter"></i>
-                </Button>
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="card-header bg-white border-0 px-4 py-3">
+                <div class="d-flex flex-column flex-xl-row align-items-xl-center justify-content-between gap-3">
+                    <div>
+                        <h1 class="h4 mb-1">Products</h1>
+                        <p class="text-muted mb-0 small">
+                            Manage inventory records, stock status, locations, and product availability.
+                        </p>
+                    </div>
+
+                    <div class="d-flex flex-wrap align-items-center gap-2">
+                        <Button Color="@(_showContent ? ButtonColor.Primary : ButtonColor.Info)"
+                                Outline="@(!_showContent)"
+                                @onclick=ShowContent>
+                            <i class="bi bi-funnel me-2"></i>
+                            Filters
+                        </Button>
+
+                        <div class="vr d-none d-md-block mx-1"></div>
+
+                        <div class="page-size-chooser d-flex align-items-center">
+                            <label class="me-2 mb-0 small text-muted">Rows</label>
+                            <select class="form-select form-select-sm rounded-pill" style="width: auto;" @bind="_pagination.ItemsPerPage">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+
+                        @if (_isManagerOrAdmin)
+                        {
+                            <Button Color="ButtonColor.Primary" @onclick="Create">
+                                <i class="bi bi-plus-lg me-2"></i>
+                                Add Product
+                            </Button>
+                        }
+                    </div>
+                </div>
             </div>
-            <div class="col-auto page-size-chooser d-flex align-items-center">
-                <label class="me-2 mb-0">Items per page:</label>
-                <select class="form-select form-select-sm" style="width: auto;" @bind="_pagination.ItemsPerPage">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="50">50</option>
-                </select>
-            </div>
-            @if (_isManagerOrAdmin)
+
+            @if (_showContent)
             {
-                <div class="col-auto">
-                    <Button Color="ButtonColor.Secondary" Outline="true" @onclick="Create">Add Product</Button>
+                <div class="border-top bg-light-subtle px-4 py-3">
+                    <div class="row align-items-end g-3">
+                        <div class="col-md-6 col-xl-3 search-box">
+                            <label class="form-label small fw-semibold text-muted">Product Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white">
+                                    <i class="bi bi-search"></i>
+                                </span>
+                                <input class="form-control" type="search" autofocus @bind="_nameSearch"
+                                       @bind:event="oninput"
+                                       @bind:after="OnFilterChanged"
+                                       placeholder="Search products"/>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-xl-3 search-box">
+                            <label class="form-label small fw-semibold text-muted">Category</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white">
+                                    <i class="bi bi-tags"></i>
+                                </span>
+                                <input class="form-control" type="search" autofocus @bind="_categorySearch"
+                                       @bind:event="oninput"
+                                       @bind:after="OnFilterChanged"
+                                       placeholder="Search categories"/>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-xl-2 search-box">
+                            <label class="form-label small fw-semibold text-muted">Start Date</label>
+                            <input class="form-control" type="datetime-local" @bind="_startDate" @bind:event="oninput"
+                                   @bind:after="OnFilterChanged"/>
+                        </div>
+
+                        <div class="col-md-6 col-xl-2 search-box">
+                            <label class="form-label small fw-semibold text-muted">End Date</label>
+                            <input class="form-control" type="datetime-local" @bind="_endDate" @bind:event="oninput"
+                                   @bind:after="OnFilterChanged"/>
+                        </div>
+
+                        <div class="col-md-6 col-xl-1 search-box">
+                            <label class="form-label small fw-semibold text-muted">Active</label>
+                            <select class="form-select"
+                                    @bind="_isActiveFilterValue"
+                                    @bind:after="OnFilterChanged">
+                                <option value="">All</option>
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 col-xl-1">
+                            <Button Color="ButtonColor.Info" Outline="true" @onclick="ClearFilters">
+                                <i class="bi bi-x-circle me-1"></i>
+                                Clear
+                            </Button>
+                        </div>
+                    </div>
                 </div>
             }
+
+            <div class="table-responsive">
+                <QuickGrid Items="FilteredProducts" ItemKey="p => p.Id" Pagination="@_pagination" Theme="none"
+                           Class="table table-hover align-middle mb-0">
+                    <PropertyColumn Property="@(p => p.ProductName)" Title="Product Name" Sortable="true" Align="Align.Center"
+                                    IsDefaultSortColumn="true"/>
+                    <PropertyColumn Property="@(p => p.Sku)" Title="SKU" Sortable="true" Align="Align.Center"></PropertyColumn>
+                    <PropertyColumn Property="@(p => p.Category)" Sortable="true" Align="Align.Center"/>
+                    @if (_isManagerOrAdmin)
+                    {
+                        <PropertyColumn Property="@(p => p.Price)" Sortable="true" Align="Align.Center"/>
+                    }
+                    <PropertyColumn Property="@(p => p.Quantity)" Sortable="true" Align="Align.Center"/>
+                    <PropertyColumn Property="@(p => p.Location)" Sortable="true" Align="Align.Center"/>
+                    <PropertyColumn Property="@(p => p.DateAdded)" Title="Date Added" Format="MM-dd-yyyy"
+                                    Align="Align.Center"/>
+                    <TemplateColumn Title="Status" Align="Align.Center">
+                        <div class="@(GetStatusClass(context.Status))">
+                            @(context.Status.GetDisplayName() ?? context.Status.ToString())
+                        </div>
+                    </TemplateColumn>
+                    <TemplateColumn Title="Is Active?" Align="Align.Center">
+                        <input class="form-check-input" type="checkbox" checked="@context.IsActive" disabled/>
+                    </TemplateColumn>
+                    @if (_isManagerOrAdmin)
+                    {
+                        <TemplateColumn Title="Actions" Context="product" Align="Align.Center">
+                            <div class="d-flex justify-content-center gap-2">
+                                <Button Color="ButtonColor.Primary" Outline="true" @onclick="() => Edit(product.Id)">
+                                    <i class="bi bi-pencil-square"></i>
+                                </Button>
+                                <Button Color="ButtonColor.Danger" Outline="true" @onclick="() => Delete(product.Id)">
+                                    <i class="bi bi-trash3"></i>
+                                </Button>
+                            </div>
+                        </TemplateColumn>
+                    }
+                </QuickGrid>
+            </div>
+
+            <div class="card-footer bg-white border-0 px-4 py-3">
+                <Paginator State="_pagination"/>
+            </div>
         </div>
-
-        @if (_showContent)
-        {
-            <div class="row align-items-center justify-content-between g-2 mb-3">
-                <div class="col-3 search-box">
-                    <label>Search by Name</label>
-                    <input class="form-control" type="search" autofocus @bind="_nameSearch"
-                           @bind:event="oninput"
-                           @bind:after="OnFilterChanged"
-                           placeholder="Search by name.."/>
-                </div>
-                <div class="col-3 search-box">
-                    <label>Search by Category</label>
-                    <input class="form-control" type="search" autofocus @bind="_categorySearch"
-                           @bind:event="oninput"
-                           @bind:after="OnFilterChanged"
-                           placeholder="Search by category.."/>
-                </div>
-                <div class="col-2 search-box">
-                    <label>Filter by Start Date</label>
-                    <input class="form-control" type="datetime-local" @bind="_startDate" @bind:event="oninput"
-                           @bind:after="OnFilterChanged"
-                           placeholder="Start"/>
-                </div>
-                <div class="col-2 search-box">
-                    <label>Filter by End Date</label>
-                    <input class="form-control" type="datetime-local" @bind="_endDate" @bind:event="oninput"
-                           @bind:after="OnFilterChanged"
-                           placeholder="End"/>
-                </div>
-                <div class="col-1 search-box">
-                    <label>Is Active?</label>
-                    <select class="form-select"
-                            @bind="_isActiveFilterValue"
-                            @bind:after="OnFilterChanged">
-                        <option value="">All</option>
-                        <option value="true">Active</option>
-                        <option value="false">Inactive</option>
-                    </select>
-                </div>
-                <div class="col-1">
-                    <label>Clear Filters</label>
-                    <Button Color="ButtonColor.Secondary" Outline="true" @onclick="ClearFilters">
-                        <i class="bi bi-x-circle"></i>
-                    </Button>
-                </div>
-            </div>
-        }
-
-        <QuickGrid Items="FilteredProducts" ItemKey="p => p.Id" Pagination="@_pagination" Theme="none"
-                   Class="table table-hover">
-            <PropertyColumn Property="@(p => p.ProductName)" Title="Product Name" Sortable="true" Align="Align.Center"
-                            IsDefaultSortColumn="true"/>
-            <PropertyColumn Property="@(p => p.Sku)" Title="SKU" Sortable="true" Align="Align.Center"></PropertyColumn>
-            <PropertyColumn Property="@(p => p.Category)" Sortable="true" Align="Align.Center"/>
-            @if (_isManagerOrAdmin)
-            {
-                <PropertyColumn Property="@(p => p.Price)" Sortable="true" Align="Align.Center"/>
-            }
-            <PropertyColumn Property="@(p => p.Quantity)" Sortable="true" Align="Align.Center"/>
-            <PropertyColumn Property="@(p => p.Location)" Sortable="true" Align="Align.Center"/>
-            <PropertyColumn Property="@(p => p.DateAdded)" Title="Date Added" Format="MM-dd-yyyy"
-                            Align="Align.Center"/>
-            <TemplateColumn Title="Status" Align="Align.Center">
-                <div class="@(GetStatusClass(context.Status))">
-                    @(context.Status.GetDisplayName() ?? context.Status.ToString())
-                </div>
-            </TemplateColumn>
-            <TemplateColumn Title="Is Active?" Align="Align.Center">
-                <input class="form-check-input" type="checkbox" checked="@context.IsActive" disabled/>
-            </TemplateColumn>
-            @if (_isManagerOrAdmin)
-            {
-                <TemplateColumn Title="Actions" Context="product" Align="Align.Center">
-                    <Button Color="ButtonColor.Primary" Outline="true" @onclick="() => Edit(product.Id)">
-                        <i
-                            class="bi bi-pencil-square"></i></Button>
-                    <Button Color="ButtonColor.Danger" Outline="true" @onclick="() => Delete(product.Id)">
-                        <i
-                            class="bi bi-trash3"></i>
-                    </Button>
-                </TemplateColumn>
-            }
-        </QuickGrid>
-    </div>
-    <div>
-        <Paginator State="_pagination"/>
     </div>
 }
 
