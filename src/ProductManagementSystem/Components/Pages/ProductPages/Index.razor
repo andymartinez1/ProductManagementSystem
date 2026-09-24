@@ -24,21 +24,29 @@ else
         {
             <div class="row align-items-stretch g-3 mb-4">
                 <div class="col-sm-6 col-xl-3">
-                    <ProductCard Title="Total Items" IconClass="bi bi-box-seam" Count=@_totalItems
-                                 ShortDescription="Across all locations"/>
+                    <div class="h-100 rounded-4 shadow-sm">
+                        <ProductCard Title="Total Items" IconClass="bi bi-box-seam" Count=@_totalItems
+                                     ShortDescription="Across all locations"/>
+                    </div>
                 </div>
                 <div class="col-sm-6 col-xl-3">
-                    <ProductCard Title="Low Stock Items" IconClass="bi bi-exclamation-triangle"
-                                 Count=@_totalLowStockItems
-                                 ShortDescription="Require restocking"/>
+                    <div class="h-100 rounded-4 shadow-sm">
+                        <ProductCard Title="Low Stock Items" IconClass="bi bi-exclamation-triangle"
+                                     Count=@_totalLowStockItems
+                                     ShortDescription="Require restocking"/>
+                    </div>
                 </div>
                 <div class="col-sm-6 col-xl-3">
-                    <ProductCard Title="Total Value" IconClass="bi bi-graph-up-arrow" Count=@($"${_totalPrice}")
-                                 ShortDescription="Current inventory value"/>
+                    <div class="h-100 rounded-4 shadow-sm">
+                        <ProductCard Title="Total Value" IconClass="bi bi-graph-up-arrow" Count=@($"${_totalPrice}")
+                                     ShortDescription="Current inventory value"/>
+                    </div>
                 </div>
                 <div class="col-sm-6 col-xl-3">
-                    <ProductCard Title="Categories" IconClass="bi bi-tags" Count=@_categoryCount
-                                 ShortDescription="Product categories"/>
+                    <div class="h-100 rounded-4 shadow-sm">
+                        <ProductCard Title="Categories" IconClass="bi bi-tags" Count=@_categoryCount
+                                     ShortDescription="Product categories"/>
+                    </div>
                 </div>
             </div>
         }
