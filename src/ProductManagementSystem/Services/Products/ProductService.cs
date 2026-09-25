@@ -45,7 +45,7 @@ public class ProductService : IProductService
 
     public async Task<List<ProductResponse>> GetAllProductsAsync()
     {
-        return await _context.Products.Select(p => p.ToProductResponse()).ToListAsync();
+        return await _context.Products.Select(p => p.ToProductResponse()).AsNoTracking().ToListAsync();
     }
 
     public async Task<ProductResponse?> GetProductAsync(int? id)
